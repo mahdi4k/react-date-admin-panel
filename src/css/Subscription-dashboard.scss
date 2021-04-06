@@ -1,0 +1,60 @@
+.dashboard-subscription {
+  .search-box {
+    width: 400px;
+  }
+
+  .user-sub-box {
+    background-color: white;
+    padding-top: 38px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 25px;
+
+    img {
+      width: 92px;
+      border-radius: 100%;
+    }
+
+    .userEmail {
+      color: #9897B4;
+    }
+    .premium{
+      color: #F92B81;
+      background-color: #FEDFEC;
+    }
+    .lightBlue{
+      color: #2CA7EC;
+      background-color: #E0F2FC;
+    }
+    .btn{
+      font-size: 13px;
+      border-radius: 8px;
+    }
+    .footer{
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      border-top: 1px solid #cccccc;
+
+      margin-top: 30px;
+      div{
+        color: #9897B4;
+        font-size: 15px;
+        padding: 25px 0;
+        &:first-child{
+          border-right: 1px solid #cccccc;
+          &:after{
+            content: "\f061";
+            font-family: "Font Awesome 5 Pro";
+            position: absolute;
+            right: -9px;
+            font-size: 14pt;
+            background: white;
+            color: #04C694;
+          }
+        }
+      }
+    }
+  }
+}

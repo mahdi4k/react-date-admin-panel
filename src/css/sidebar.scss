@@ -1,0 +1,62 @@
+$panelColor: #F7F8FC;
+$activeMenuColor: #04C694;
+$upPercentColor: #04C694;
+$downPercentColor: #FA2155;
+.sidebar {
+  height: 100vh;
+  border-right: 5px solid #d7d9e4;
+  background-color: #F7F8FC;
+  @media (min-width: 800px) {
+    .logo-panel {
+      margin-top: 4rem;
+    }
+  }
+  @media (max-width: 1440px) {
+    height: 100%;
+  }
+  .sidebar-icons {
+    margin-top: 5rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+
+    span {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      left: 5px;
+
+      svg {
+        margin: 2.6rem 0;
+        filter: brightness(1.1) grayscale(1.7);;
+        width: 45px;
+        fill: #BEC3D7  ;
+      }
+
+    }
+
+    .img-profile {
+      img {
+        filter: unset;
+        margin-top: 3.5rem;
+        width: 80px;
+      }
+    }
+
+    span.active {
+      border-right: 4px solid #04C694;
+
+      svg {
+        filter: unset !important;
+        fill: #04c694;
+      }
+    }
+
+
+  }
+
+
+}

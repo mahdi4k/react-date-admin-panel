@@ -1,0 +1,119 @@
+$grid-breakpoints: (
+        xs: 0,
+        sm: 600px,
+        md: 800px,
+        lg: 1000px,
+        xl: 1300px,
+        xxl: 1650px
+);
+
+@import "~bootstrap/scss/bootstrap";
+
+$panelColor: #F7F8FC;
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("./fonts/Inter-Medium.woff2") format("woff2"),
+  url("./fonts/Inter-Medium.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./fonts/Inter-Bold.woff2?v=3.15") format("woff2"),
+  url("./fonts/Inter-Bold.woff?v=3.15") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url("./fonts/Inter-Light.woff2?v=3.15") format("woff2"),
+  url("./fonts/Inter-Light.woff?v=3.15") format("woff");
+}
+
+body {
+  font-family: 'Inter', serif;
+  background-color: $panelColor;
+}
+
+p {
+  margin: unset;
+}
+.search-box{
+   input{
+     border: unset;
+     border-radius: 12px !important;
+     height: 43px !important;
+     padding-left: 30px;
+     &::placeholder{
+       color: #d7d9e4;
+       padding-left: 7px;
+      }
+   }
+  .search-icon{
+    position: relative;
+    left: 22px;
+    z-index: 10;
+    top: 12px;
+  }
+}
+.custom-modal {
+  .modal-content{
+    padding: 1.5rem;
+    border-radius: 25px;
+    .modal-body{
+      text-align: center;
+      color: #6F6E8B;
+    }
+    .btn-userBlock{
+      padding: 17px 65px;
+      background-color: #F1F2F9;
+      border-radius: 22px;
+      font-weight: bold;
+    }
+    .btn-userDelete{
+      padding: 17px 65px;
+      background-color: #FA2155;
+      border-radius: 22px;
+      font-weight: bold;
+      color: white;
+    }
+  }
+}
+.package-btn {
+  background: #04C694;
+  box-shadow: 0 7px 35px rgba(4, 198, 148, 0.2);
+  border-radius: 20px;
+  color: white;
+  height: min-content;
+  padding: 15px 26px;
+  font-size: 19px;
+}
+
+  .package-form{
+    .form-control{
+    background-color: #F1F2F9;
+    border: 0;
+    border-radius: 10px;
+    height: 55px;
+    font-size: 13pt;
+  }
+}
+
+.w3-animate-fading{animation:fading 10s infinite}@keyframes fading{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
+.w3-animate-opacity{animation:opac 0.8s}@keyframes opac{from{opacity:0} to{opacity:1}}
+.w3-animate-top{position:relative;animation:animatetop 0.4s}@keyframes animatetop{from{top:-300px;opacity:0} to{top:0;opacity:1}}
+.w3-animate-left{position:relative;animation:animateleft 0.4s}@keyframes animateleft{from{left:-300px;opacity:0} to{left:0;opacity:1}}
+.w3-animate-right{position:relative;animation:animateright 0.4s}@keyframes animateright{from{right:-300px;opacity:0} to{right:0;opacity:1}}
+.w3-animate-bottom{position:relative;animation:animatebottom 0.4s}@keyframes animatebottom{from{bottom:-300px;opacity:0} to{bottom:0;opacity:1}}
+.w3-animate-zoom {animation:animatezoom 0.6s}@keyframes animatezoom{from{transform:scale(0)} to{transform:scale(1)}}
+.w3-animate-input{transition:width 0.4s ease-in-out}.w3-animate-input:focus{width:100%!important}
+
+
+ @import "css/sidebar";

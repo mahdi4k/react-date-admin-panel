@@ -1,0 +1,142 @@
+$panelColor: #F7F8FC;
+$activeMenuColor: #04C694;
+$upPercentColor: #04C694;
+$downPercentColor: #FA2155;
+.dashboard-home {
+  .home-box {
+    margin-top: 40px;
+
+    .box {
+      border-radius: 30px;
+      background-color: white;
+      @media (min-width:1600px ){
+        max-width: 305px;
+      }
+      width: 100%;
+
+      &:not(:last-child) {
+        margin-right: 36px;
+      }
+    }
+
+    .numberUser {
+      margin-top: 31px;
+      font-size: 47px;
+      font-weight: bold;
+    }
+
+    .header-box {
+      .user-box {
+        background: #E8E6FB;
+        border-radius: 19px;
+
+        p {
+          letter-spacing: 1px;
+          font-size: 19px;
+        }
+      }
+
+      .match-box {
+        background: #FEE4EA;
+        border-radius: 19px;
+        padding: 1rem 1rem .8rem 1rem;
+
+        i {
+          font-size: 18pt;
+          color: #FA2155;
+        }
+      }
+      .crown-box {
+        background: #E3FAF0;
+        border-radius: 19px;
+        padding: 1rem 1rem .8rem 1rem;
+
+        i {
+          font-size: 18pt;
+          color: #04C694;
+        }
+      }
+
+      .users-icon {
+        filter: hue-rotate(101deg) brightness(0.7);
+      }
+
+      img {
+        width: 25px;
+      }
+    }
+
+    .footer-box {
+      margin-top: 31px;
+
+      i {
+        color: #04C694;
+      }
+
+      .percent {
+        margin-right: 7px;
+      }
+
+      .upPercent {
+        color: $upPercentColor;
+      }
+
+      .downPercent {
+        color: $downPercentColor;
+      }
+    }
+  }
+  .dashboard-chart{
+    background-color: white;
+    border-radius: 30px;
+    margin-top: 40px;
+    padding: 30px;
+  }
+}
+.dashboard{
+  .right-side{
+    .custom-progressbar{
+      width: 60%;
+      margin: 30px auto;
+    }
+    .sub-title{
+      color: #9897B4;
+      font-size: 12px;
+      margin-right: 45px;
+    }
+    .box{
+      padding: 23px;
+      margin-right: 18px;
+      border-radius: 30px;
+      border: 1.5px solid #E7EBF8;
+      .total{
+        font-weight: bold;
+        font-size: 22px;
+        margin-top: 10px;
+      }
+      i{
+        color: #6A5DF5;
+        font-size: 21px;
+      }
+    }
+    .userActivity{
+      margin-top: 75px;
+      .userActivityList{
+        .userActivityItem{
+          display: flex;
+          align-items: center;
+          span{
+            color: #6A5EF5;
+          }
+        }
+        img{
+          width: 30px;
+        }
+      }
+      .times{
+        font-size: 13px;
+        color: #b6b7c1;
+      }
+    }
+  }
+}
