@@ -4,6 +4,7 @@ import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import UsersScreen from "./screens/UsersScreen";
 import SubscriptionScreen from "./screens/SubscriptionScreen";
 import PackageScreen from "./screens/PackageScreen";
+import LoginScreen from "./screens/LoginScreen";
 
 function App() {
     return (
@@ -12,6 +13,7 @@ function App() {
 
                 <Switch>
                   <Route exact path='/' component={HomeScreen}/>
+                  <Route exact path='/login' component={LoginScreen}/>
                   <Route exact path='/users' component={UsersScreen}/>
                   <Route exact path='/subscription' component={SubscriptionScreen}/>
                   <Route exact path='/packages' component={PackageScreen}/>
