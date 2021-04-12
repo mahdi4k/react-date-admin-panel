@@ -45,39 +45,46 @@ body {
 p {
   margin: unset;
 }
-.search-box{
-   input{
-     border: unset;
-     border-radius: 12px !important;
-     height: 43px !important;
-     padding-left: 30px;
-     &::placeholder{
-       color: #d7d9e4;
-       padding-left: 7px;
-      }
-   }
-  .search-icon{
+
+.search-box {
+  input {
+    border: unset;
+    border-radius: 12px !important;
+    height: 43px !important;
+    padding-left: 30px;
+
+    &::placeholder {
+      color: #d7d9e4;
+      padding-left: 7px;
+    }
+  }
+
+  .search-icon {
     position: relative;
     left: 22px;
     z-index: 10;
     top: 12px;
   }
 }
+
 .custom-modal {
-  .modal-content{
+  .modal-content {
     padding: 1.5rem;
     border-radius: 25px;
-    .modal-body{
+
+    .modal-body {
       text-align: center;
       color: #6F6E8B;
     }
-    .btn-userBlock{
+
+    .btn-userBlock {
       padding: 17px 65px;
       background-color: #F1F2F9;
       border-radius: 22px;
       font-weight: bold;
     }
-    .btn-userDelete{
+
+    .btn-userDelete {
       padding: 17px 65px;
       background-color: #FA2155;
       border-radius: 22px;
@@ -86,6 +93,7 @@ p {
     }
   }
 }
+
 .package-btn {
   background: #04C694;
   box-shadow: 0 7px 35px rgba(4, 198, 148, 0.2);
@@ -96,8 +104,8 @@ p {
   font-size: 19px;
 }
 
-  .package-form{
-    .form-control{
+.package-form {
+  .form-control {
     background-color: #F1F2F9;
     border: 0;
     border-radius: 10px;
@@ -106,14 +114,176 @@ p {
   }
 }
 
-.w3-animate-fading{animation:fading 10s infinite}@keyframes fading{0%{opacity:0}50%{opacity:1}100%{opacity:0}}
-.w3-animate-opacity{animation:opac 0.8s}@keyframes opac{from{opacity:0} to{opacity:1}}
-.w3-animate-top{position:relative;animation:animatetop 0.4s}@keyframes animatetop{from{top:-300px;opacity:0} to{top:0;opacity:1}}
-.w3-animate-left{position:relative;animation:animateleft 0.4s}@keyframes animateleft{from{left:-300px;opacity:0} to{left:0;opacity:1}}
-.w3-animate-right{position:relative;animation:animateright 0.4s}@keyframes animateright{from{right:-300px;opacity:0} to{right:0;opacity:1}}
-.w3-animate-bottom{position:relative;animation:animatebottom 0.4s}@keyframes animatebottom{from{bottom:-300px;opacity:0} to{bottom:0;opacity:1}}
-.w3-animate-zoom {animation:animatezoom 0.6s}@keyframes animatezoom{from{transform:scale(0)} to{transform:scale(1)}}
-.w3-animate-input{transition:width 0.4s ease-in-out}.w3-animate-input:focus{width:100%!important}
+//login form
+.pt-6 {
+  padding-top: 6rem;
+}
+
+.loginSection {
+  .logo {
+    display: flex;
+    margin: 0 auto 8rem;
+  }
+
+  .loginForm {
+    box-shadow: 0px 20px 85px rgba(0, 0, 0, 0.01);
+    border-radius: 35px;
+    padding: 3rem;
+
+    input[type=email],input[type=password] {
+      background: #F1F2F9;
+      border-radius: 12px;
+      border: unset;
+      height: 60px;
+      font-size: 20px;
+    }
+    .custom-control-input:checked ~ .custom-control-label::before {
+      color: #fff;
+      border-color:  #04C694;
+      background-color:  #04C694;
+      cursor: pointer;
+    }
+    .custom-control-label::before {
+      width: 1.5rem;
+      height: 1.5rem;
+      top: 0rem;
+      left: -2.3rem;
+    }
+
+    .custom-control-label::after {
+      width: 1.5rem;
+      height: 1.5rem;
+      top: 0rem;
+      left: -2.3rem;
+    }
+    .custom-control-label{
+      cursor: pointer;
+      margin-left: 15px;
+      user-select: none
+    }
+    .btn-custom-submit{
+      background: #04C694;
+      box-shadow: 0px 7px 35px rgba(4, 198, 148, 0.2);
+      border-radius: 18px;
+      border: unset;
+      padding: 15px;
+    }
+  }
+}
+
+.w3-animate-fading {
+  animation: fading 10s infinite
+}
+
+@keyframes fading {
+  0% {
+    opacity: 0
+  }
+  50% {
+    opacity: 1
+  }
+  100% {
+    opacity: 0
+  }
+}
+
+.w3-animate-opacity {
+  animation: opac 0.8s
+}
+
+@keyframes opac {
+  from {
+    opacity: 0
+  }
+  to {
+    opacity: 1
+  }
+}
+
+.w3-animate-top {
+  position: relative;
+  animation: animatetop 0.4s
+}
+
+@keyframes animatetop {
+  from {
+    top: -300px;
+    opacity: 0
+  }
+  to {
+    top: 0;
+    opacity: 1
+  }
+}
+
+.w3-animate-left {
+  position: relative;
+  animation: animateleft 0.4s
+}
+
+@keyframes animateleft {
+  from {
+    left: -300px;
+    opacity: 0
+  }
+  to {
+    left: 0;
+    opacity: 1
+  }
+}
+
+.w3-animate-right {
+  position: relative;
+  animation: animateright 0.4s
+}
+
+@keyframes animateright {
+  from {
+    right: -300px;
+    opacity: 0
+  }
+  to {
+    right: 0;
+    opacity: 1
+  }
+}
+
+.w3-animate-bottom {
+  position: relative;
+  animation: animatebottom 0.4s
+}
+
+@keyframes animatebottom {
+  from {
+    bottom: -300px;
+    opacity: 0
+  }
+  to {
+    bottom: 0;
+    opacity: 1
+  }
+}
+
+.w3-animate-zoom {
+  animation: animatezoom 0.6s
+}
+
+@keyframes animatezoom {
+  from {
+    transform: scale(0)
+  }
+  to {
+    transform: scale(1)
+  }
+}
+
+.w3-animate-input {
+  transition: width 0.4s ease-in-out
+}
+
+.w3-animate-input:focus {
+  width: 100% !important
+}
 
 
- @import "css/sidebar";
+@import "css/sidebar";

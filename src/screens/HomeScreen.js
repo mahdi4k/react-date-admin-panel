@@ -171,9 +171,11 @@ const HomeScreen = ({history}) => {
                                     </div>
                                     <div className="userActivityList mt-4">
                                         {userActivityAction.map((el)=> {
-                                                const CallTime =    moment(el.createdAt).format('X') * 10 - moment().format('X')
-                                                const diffTime =  Math.round(CallTime / (1000   * 24 * 60))
-
+                                                const currentTime = moment()
+                                                const CallTime = moment().format('X') - moment(el.createdAt).format('X')
+                                                const diffTime =  moment().format('X') - CallTime
+                                                const actionTime = moment.unix(diffTime).format('YYYY-MM-DD')
+                                                const durationAction = currentTime.diff(actionTime,"minute")
                                             return(
                                                 <div key={el._id} className="d-flex justify-content-between mb-4 align-items-center">
                                                     <div className="userActivityItem">
@@ -181,7 +183,7 @@ const HomeScreen = ({history}) => {
                                                         <p className='ml-2'>
                                                             <span>{el.user1.username}</span> {el.action} <span>{el.user2.username}</span></p>
                                                     </div>
-                                                    <p className='times'> { diffTime } min </p>
+                                                    <p className='times'>{durationAction}   min </p>
                                                 </div>
                                             )
                                         }

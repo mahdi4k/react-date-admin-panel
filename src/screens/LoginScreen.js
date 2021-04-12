@@ -39,31 +39,39 @@ const LoginScreen = ({location, history}) => {
     }
     return (
         <>
+            <img className='position-absolute' src="/img/bg.svg" alt=""/>
             <Container>
-                <Col md={{span: 8, offset: 2}}>
-                    <div className='p-3 mt-3 bg-white loginForm'>
-                        <h1>login</h1>
-                        {message && <Message variant='danger' ErrorsMessage={message}/>}
+
+                <Col className='pt-6 loginSection' md={{span: 8, offset: 2}}>
+                    <img className='logo' src="/logo.svg" alt=""/>
+                    <div className='p-5 loginForm bg-white '>
+                        <h2 className='mb-5'>Login to your account</h2>
+                         {message && <Message variant='danger' ErrorsMessage={message}/>}
 
                         <Form onSubmit={submitHandler}>
                             <Form.Group controlId='email'>
-                                <Form.Label>email</Form.Label>
+                                <Form.Label>Email Address :</Form.Label>
                                 <Form.Control type='email' value={email}
                                               onChange={(e) => setEmail(e.target.value)}>
                                 </Form.Control>
                             </Form.Group>
 
                             <Form.Group controlId='password'>
-                                <Form.Label>password</Form.Label>
+                                <Form.Label>Password :</Form.Label>
                                 <Form.Control type='password' value={password}
                                               onChange={(e) => setPassword(e.target.value)}>
                                 </Form.Control>
                             </Form.Group>
-
-                            <Button className='d-flex  text-center justify-content-center w-25' type='submit'
-                                    variant='primary'>
-                                login
-                            </Button>
+                            <Form.Group controlId="rememberCheckBox">
+                                <Form.Check custom type="checkbox" label="Remember my login details" />
+                            </Form.Group>
+                            <div className='d-flex mt-5 justify-content-between'>
+                                <Button className='d-flex btn btn-custom-submit text-center justify-content-center w-25' type='submit'
+                                >
+                                    login
+                                </Button>
+                                <button className='btn '>Forget Password</button>
+                            </div>
 
                         </Form>
 
