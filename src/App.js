@@ -5,6 +5,7 @@ import UsersScreen from "./screens/UsersScreen";
 import SubscriptionScreen from "./screens/SubscriptionScreen";
 import PackageScreen from "./screens/PackageScreen";
 import LoginScreen from "./screens/LoginScreen";
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
     return (

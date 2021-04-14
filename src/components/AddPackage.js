@@ -5,6 +5,7 @@ const AddPackage = ({show,setShow}) => {
     const updateModalState = ()=>{
         setShow(false)
     }
+    
     return (
         <>
             <Modal className='custom-modal' centered show={show} onHide={updateModalState}>

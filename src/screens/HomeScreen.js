@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Sidebar from "../components/Sidebar";
 import {Col, Dropdown} from "react-bootstrap";
 import DashBoardChart from "../components/DashBoardChart";
@@ -8,11 +8,12 @@ import "../css/home-dashboard.scss"
 import moment from "moment";
 import Loader from "../components/Loader";
 import HomeDashboardBoxes from "../components/HomeDashboardBoxes";
+
 const HomeScreen = ({history}) => {
 
     const [loading, setLoading] = useState(true)
     const [api_token, setApitoken] = useState('')
-    const [userDetails,setUserDetails] =useState(Object)
+    const [userDetails, setUserDetails] = useState(Object)
 
 
     useEffect(() => {
@@ -39,27 +40,27 @@ const HomeScreen = ({history}) => {
                 const likeCount = await apiClient.get(`/actions/count?action=liked`, config)
                 const premiumUser = await apiClient.get(`/users/count?premiumUntil_gte=${moment().format('YYYY-MM-DD')}`, config)
                 setUserDetails({
-                    userCount : userCount.data,
-                    matchCount : matchCount.data,
-                    likeCount : likeCount.data,
-                    premiumUserCount : premiumUser.data
+                    userCount: userCount.data,
+                    matchCount: matchCount.data,
+                    likeCount: likeCount.data,
+                    premiumUserCount: premiumUser.data
                 })
                 setLoading(false)
 
             } catch (error) {
-               // console.log(error)
-               // error.response && setMessage(error.response.data.errors)
+                // console.log(error)
+                // error.response && setMessage(error.response.data.errors)
             }
         }
 
         getUsersDetail()
 
 
-    }, [setUserDetails,api_token,setLoading,setApitoken])
+    }, [setUserDetails, api_token, setLoading, setApitoken])
 
 
     //users activity
-    const [userActivityAction,setUserActivityAction] = useState(Array)
+    const [userActivityAction, setUserActivityAction] = useState(Array)
     useEffect(() => {
 
         async function getUsersActivity() {
@@ -79,9 +80,10 @@ const HomeScreen = ({history}) => {
                 // error.response && setMessage(error.response.data.errors)
             }
         }
+
         getUsersActivity()
 
-    },[api_token,setUserActivityAction])
+    }, [api_token, setUserActivityAction])
 
     return (
         <>
@@ -170,26 +172,27 @@ const HomeScreen = ({history}) => {
                                         </Dropdown>
                                     </div>
                                     <div className="userActivityList mt-4">
-                                        {userActivityAction.map((el)=> {
+                                        {userActivityAction.map((el) => {
                                                 const currentTime = moment()
                                                 const CallTime = moment().format('X') - moment(el.createdAt).format('X')
-                                                const diffTime =  moment().format('X') - CallTime
+                                                const diffTime = moment().format('X') - CallTime
                                                 const actionTime = moment.unix(diffTime).format('YYYY-MM-DD')
-                                                const durationAction = currentTime.diff(actionTime,"minute")
-                                            return(
-                                                <div key={el._id} className="d-flex justify-content-between mb-4 align-items-center">
-                                                    <div className="userActivityItem">
-                                                        <img src="./img/sidebar/user.png" alt=""/>
-                                                        <p className='ml-2'>
-                                                            <span>{el.user1.username}</span> {el.action} <span>{el.user2.username}</span></p>
+                                                const durationAction = currentTime.diff(actionTime, "minute")
+                                                return (
+                                                    <div key={el._id}
+                                                         className="d-flex justify-content-between mb-4 align-items-center">
+                                                        <div className="userActivityItem">
+                                                            <img src="./img/sidebar/user.png" alt=""/>
+                                                            <p className='ml-2'>
+                                                                <span>{el.user1.username}</span> {el.action}
+                                                                <span>{el.user2.username}</span></p>
+                                                        </div>
+                                                        <p className='times'>{durationAction} min </p>
                                                     </div>
-                                                    <p className='times'>{durationAction}   min </p>
-                                                </div>
-                                            )
-                                        }
-
+                                                )
+                                            }
                                         )}
-                                     </div>
+                                    </div>
                                 </div>
                             </div>
 

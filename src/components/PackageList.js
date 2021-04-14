@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import DeleteModal from "./DeleteModal";
 
-const PackageList = () => {
+const PackageList = ({title, price, days}) => {
     const [show, setShow] = useState(false);
 
     const DeleteBoxShow = () => setShow(true);
@@ -17,18 +17,18 @@ const PackageList = () => {
                                            <use xlinkHref="/img/sidebar/sprite.svg#fr-crown"/>
                                         </svg>
                                     </span>
-                    <p> Premium package </p>
+                    <p>{title}</p>
                 </div>
                 <div className='  col-12 col-lg-2 per-month
                                  flex-xl-row pl-3 pr-lg-3 pr-md-3 py-md-4 justify-content-center'>
                     <i className="fal fa-money-bill mr-3"></i>
-                    <p>$ 38 per month</p>
+                    <p>$ {price} per month</p>
                 </div>
 
                 <div className='user-setting col-lg-6 col-12 flex-column flex-lg-row'>
                     <div className='d-flex align-items-center'>
                         <i className="fal fa-clock"></i>
-                        <p>3 months </p>
+                        <p>{days} day</p>
                     </div>
 
                     <div className='d-flex'>
