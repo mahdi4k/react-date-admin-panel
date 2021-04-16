@@ -11,6 +11,7 @@ const PackageScreen = ({history}) => {
     const [show, setShow] = useState(false);
     const [packageList, setPackageList] = useState([])
     const [loading, setLoading] = useState(true)
+    const [api_token,setApiToken]=useState('')
 
     useEffect(() => {
         if (localStorage.getItem('user_api') === null) {
@@ -20,13 +21,14 @@ const PackageScreen = ({history}) => {
         async function packageList() {
             try {
                 const api_token = JSON.parse(localStorage.getItem('user_api'))
+                setApiToken(api_token)
                 const config = {
                     headers: {
                         Authorization: `Bearer ${api_token}`
                     }
                 }
 
-                const {data} = await apiClient.get(`/packages`, config)
+                const {data} = await apiClient.get(`/packages?_sort=createdAt:DESC`, config)
                 setPackageList(data)
                 setLoading(false)
 
@@ -41,7 +43,7 @@ const PackageScreen = ({history}) => {
         packageList()
 
 
-    }, [setPackageList, setLoading])
+    }, [setPackageList, setLoading,history])
 
     const AddBoxShow = () => setShow(true);
     return (
@@ -62,14 +64,19 @@ const PackageScreen = ({history}) => {
                                     <button onClick={AddBoxShow} className='btn package-btn'>Add new package</button>
                                 </div>
                                 {packageList.map(pack => (
-                                    <PackageList title={pack.title} price={pack.price} days={pack.days}/>
+                                    <PackageList  key={pack._id}
+                                                  packageID={pack._id}
+                                                  title={pack.title}
+                                                  price={pack.price}
+                                                  api_token={api_token}
+                                                  days={pack.days}/>
                                 ))}
 
 
                             </div>
                         </Col>
                     </div>
-                    <AddPackage show={show} setShow={setShow}/>
+                    <AddPackage  show={show} api_token={api_token} setShow={setShow}/>
                 </div>
             }
         </>

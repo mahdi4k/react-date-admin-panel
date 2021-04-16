@@ -15,7 +15,7 @@ const UserPreview = ({userDetail, api_token}) => {
 
     useEffect(() => {
         if (userDetail) {
-
+            setLoading(true)
             async function getuserDetails() {
                 try {
                     const api_token = JSON.parse(localStorage.getItem('user_api'))
@@ -71,7 +71,7 @@ const UserPreview = ({userDetail, api_token}) => {
         }
 
 
-    }, [deleteConfirm])
+    }, [deleteConfirm,api_token,userDetail])
 
 
     const blockUser = async () => {
@@ -102,7 +102,7 @@ const UserPreview = ({userDetail, api_token}) => {
                         <h5 className='font-weight-bold'>Profile Preview</h5>
                         <div className='preview-detail flex-column mt-5 align-items-center d-flex'>
                             <div className='mt-3 text-center'>
-                                <img src="./img/user.jpg" alt=""/>
+                                <img src={`${process.env.REACT_APP_BASE_URL}${userInfo.image.url}`} alt=""/>
                                 <p className='username mt-3'>
                                     {userInfo.username}
                                 </p>

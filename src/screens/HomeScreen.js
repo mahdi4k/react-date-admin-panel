@@ -56,7 +56,7 @@ const HomeScreen = ({history}) => {
         getUsersDetail()
 
 
-    }, [setUserDetails, api_token, setLoading, setApitoken])
+    }, [setUserDetails, api_token, setLoading, setApitoken, history])
 
 
     //users activity
@@ -85,6 +85,38 @@ const HomeScreen = ({history}) => {
 
     }, [api_token, setUserActivityAction])
 
+    const filterActivity = async (filter) => {
+        try {
+
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${api_token}`
+                }
+            }
+            let UserActivity;
+            switch (filter) {
+                case 0 :
+                    UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=5`, config);
+                    break;
+                case  7 :
+                    let lastWeek = moment().startOf('day').subtract(1, 'week').format('YYYY-MM-DD');
+                    UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&createdAt_gt=${lastWeek}&_limit=5`, config);
+                    break;
+                case 30 :
+                    let lastMonth = moment().startOf('day').subtract(1, 'month').format('YYYY-MM-DD');
+                    UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&createdAt_gt=${lastMonth}&_limit=5`, config)
+                    break;
+                default :
+                    await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=5`, config);
+            }
+
+            setUserActivityAction(UserActivity.data)
+        } catch (error) {
+            // console.log(error)
+            // error.response && setMessage(error.response.data.errors)
+        }
+    }
+
     return (
         <>
             {loading ? <Loader/> :
@@ -111,7 +143,7 @@ const HomeScreen = ({history}) => {
                                 </div>
 
                                 {/*----dashboard boxes----*/}
-                                <HomeDashboardBoxes userDetails={userDetails}/>
+                                <HomeDashboardBoxes api_token={api_token} userDetails={userDetails}/>
 
                                 <div className="dashboard-chart">
                                     <div className="d-flex header-section justify-content-between my-3 ">
@@ -165,9 +197,12 @@ const HomeScreen = ({history}) => {
                                             </Dropdown.Toggle>
 
                                             <Dropdown.Menu>
-                                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                                                <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => filterActivity(0)} href="#">all
+                                                    activity</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => filterActivity(7)} href="#">last
+                                                    weak</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => filterActivity(30)} href="#">last
+                                                    month</Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     </div>

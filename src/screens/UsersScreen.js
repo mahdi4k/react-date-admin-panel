@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Sidebar from "../components/Sidebar";
-import {Col, FormControl, InputGroup} from "react-bootstrap";
+import {Col} from "react-bootstrap";
 import {Tab, Tabs, TabList, TabPanel} from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import '../css/user-dashboard.scss'
@@ -9,22 +9,24 @@ import UserPreview from "../components/UserPreview";
 import ReactPaginate from 'react-paginate';
 import apiClient from "../services/EventService";
 import Loader from "../components/Loader";
+import Search from "../components/Search";
 
 const UsersScreen = ({history}) => {
     const [userDetail, setUserDetail] = useState(false)
     const [api_token, setApitoken] = useState('')
     const [loading, setLoading] = useState(true)
     const [offset, setOffset] = useState(0);
+    const [userBlockedOffset, setUserBlockedOffset] = useState(0);
     const [Userdata, setUserData] = useState([]);
     const [BlockedUser, setBlockedUser] = useState([]);
     const [AllUserdata, setAllUserData] = useState([]);
     const [perPage] = useState(5);
     const [pageCount, setPageCount] = useState(0)
     const [BlockedUserpageCount, setPageCountBlockedUser] = useState(0)
-    const [search, setSearch] = useState('')
+    const [searchCount, setSearchCount] = useState('')
 
     // getting unblocked Users
-      useEffect(() => {
+    useEffect(() => {
         if (localStorage.getItem('user_api') === null) {
             history.push('/login')
         }
@@ -50,14 +52,14 @@ const UsersScreen = ({history}) => {
 
                 //setUserActivityAction(UserActivity.data)
             } catch (error) {
-                // console.log(error)
+                console.log(error)
                 // error.response && setMessage(error.response.data.errors)
             }
         }
 
         getUsersActivity()
 
-    }, [api_token, offset, setUserData, setPageCount, setApitoken])
+    }, [api_token, offset, setUserData, setPageCount, setApitoken,history,perPage])
 
     // getting blocked users
     useEffect(() => {
@@ -73,7 +75,7 @@ const UsersScreen = ({history}) => {
 
                 const {data} = await apiClient.get(`/users?blocked=true`, config)
 
-                const BlockedUsersSlice = data.slice(offset, offset + perPage)
+                const BlockedUsersSlice = data.slice(userBlockedOffset, userBlockedOffset + perPage)
                 setBlockedUser(BlockedUsersSlice)
                 setPageCountBlockedUser(Math.ceil(data.length / perPage))
 
@@ -86,24 +88,18 @@ const UsersScreen = ({history}) => {
 
         getBlockedUsers()
 
-    }, [api_token, offset, setUserData, setPageCount, setApitoken])
+    }, [api_token, offset, setUserData, setPageCount, setApitoken, userBlockedOffset,perPage])
 
-    useEffect(()=>{
-        if (search.length > 2){
-            setUserData(AllUserdata.filter(user => {
-                return user.username.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-                    || user.email.toLocaleLowerCase().includes(search.toLocaleLowerCase())
-            }))
-
-        }else if (search.length === 0){
-            setUserData(AllUserdata.slice(offset, offset + perPage))
-        }
-    },[search,AllUserdata,setUserData])
 
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
         setOffset(Math.ceil(selectedPage * perPage))
     };
+    const BlockUserHandlePageClick = (e) => {
+        const selectedPage = e.selected;
+        setUserBlockedOffset(Math.ceil(selectedPage * perPage))
+    };
+    console.log(searchCount)
     return (
         <>
             {loading ? <Loader/> :
@@ -123,13 +119,11 @@ const UsersScreen = ({history}) => {
                                                 <Tab>Blocked Users</Tab>
                                             </div>
                                             <li className='list-unstyled search-box'>
-                                                <InputGroup>
-                                                    <InputGroup.Prepend className='search-icon'>
-                                                        <i className="fal fa-search"> </i>
-                                                    </InputGroup.Prepend>
-                                                    <FormControl onChange={e => setSearch(e.target.value)}
-                                                                 placeholder='search...'/>
-                                                </InputGroup>
+                                                <Search
+                                                    setUserData={setUserData}
+                                                    countPerPage={perPage}
+                                                    setSearchCount={setSearchCount}
+                                                    AllUserdata={AllUserdata}/>
                                             </li>
                                         </div>
                                     </TabList>
@@ -143,6 +137,7 @@ const UsersScreen = ({history}) => {
                                                               api_token={api_token}
                                                               premium={el.premiumUntil}
                                                               username={el.username}
+                                                              userImage={el.image.url}
                                                               email={el.email}
                                                               createdAt={el.createdAt}
                                                               userID={el._id}
@@ -151,13 +146,15 @@ const UsersScreen = ({history}) => {
                                                 )
                                             })
                                         }
+                                        <div className={searchCount > 2 ? 'd-none' : ''}>
 
-                                        <ReactPaginate
-                                            pageCount={pageCount}
-                                            onPageChange={handlePageClick}
-                                            containerClassName={"pagination"}
-                                            subContainerClassName={"pages pagination"}
-                                            activeClassName={"active"}/>
+                                            <ReactPaginate
+                                                pageCount={pageCount}
+                                                onPageChange={handlePageClick}
+                                                containerClassName={"pagination"}
+                                                subContainerClassName={"pages pagination"}
+                                                activeClassName={"active"}/>
+                                        </div>
                                     </TabPanel>
                                     <TabPanel>
 
@@ -171,20 +168,19 @@ const UsersScreen = ({history}) => {
                                                               premium={el.premiumUntil}
                                                               username={el.username}
                                                               email={el.email}
+                                                              userImage={el.image.url}
                                                               createdAt={el.createdAt}
                                                               userID={el._id}
                                                               setUserDetail={setUserDetail}/>
-
 
                                                 )
                                             })
                                         }
 
 
-
                                         <ReactPaginate
                                             pageCount={BlockedUserpageCount}
-                                            onPageChange={handlePageClick}
+                                            onPageChange={BlockUserHandlePageClick}
                                             containerClassName={"pagination"}
                                             subContainerClassName={"pages pagination"}
                                             activeClassName={"active"}/>

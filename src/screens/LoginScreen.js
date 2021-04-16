@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import {Link} from "react-router-dom";
 import {Form, Button, Col, Container} from "react-bootstrap";
 import apiClient from "../services/EventService";
 import Message from "../components/Message";

@@ -3,7 +3,7 @@ import moment from "moment";
 import {ToastContainer, toast} from 'react-toastify';
 import apiClient from "../services/EventService";
 
-const UserList = ({premium, blocked, setUserDetail, username, email, createdAt, userID, api_token}) => {
+const UserList = ({premium, blocked, setUserDetail, username, email, createdAt, userID, api_token, userImage}) => {
 
     const [hideUSer, setHideUser] = useState(false)
     const premiumDate = moment(premium).format('YYYY-MM-DD')
@@ -72,7 +72,7 @@ const UserList = ({premium, blocked, setUserDetail, username, email, createdAt, 
             <div className=' users-list d-flex mt-4 flex-wrap flex-column flex-xl-row'>
                 <div onClick={() => userClicked(userID, email)} className='pl-3 col-12 col-xxl-4  flex-column flex-xl-row
                     pr-md-3 pr-lg-5 py-md-4 user-detail text-center text-xl-left'>
-                    <img src="./img/user.jpg" alt=""/>
+                    <img src={`${process.env.REACT_APP_BASE_URL}${userImage}`} alt="" />
                     <div className='ml-3'>
                         <p className='name'>{username}</p>
                         <p className='email'>{email}</p>
