@@ -361,5 +361,11 @@ p {
   opacity: 1;
   visibility: visible;
 }
-
+.custom-checkbox{
+  width: 19px;
+  height: 19px;
+}
+.cursor{
+  cursor: pointer;
+}
 @import "css/sidebar";

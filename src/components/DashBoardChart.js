@@ -1,47 +1,53 @@
-import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-const DashBoardChart = () => {
+import React, {useEffect, useState} from 'react';
+import {LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer} from 'recharts';
+import moment from "moment";
+import apiClient from "../services/EventService";
 
-    const data = [
-        {
-            name: "MON",
-            uv: 2,
+const DashBoardChart = ({api_token, dropdownChartFilter}) => {
 
-        },
-        {
-            name: "TUE",
-            uv: 3.5,
+    const [payment, setPayment] = useState([])
 
-        },
-        {
-            name: "WED",
-            uv: 1.7,
+    useEffect(() => {
+        async function dashboardChart() {
+            try {
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${api_token}`
+                    }
+                }
+                switch (dropdownChartFilter) {
+                    case 'last month':
 
-        },
-        {
-            name: "THU",
-            uv: 1.1,
+                        let lastMonth = moment().startOf('day').subtract(1, 'month').format('YYYY-MM-DD');
+                        const payment = await apiClient.get(`/payments?createdAt_gt=${lastMonth}`, config)
+                        setPayment(payment.data)
+                        break;
+                    case 'this week':
+                        let lastWeek = moment().startOf('day').subtract(1, 'week').format('YYYY-MM-DD');
+                        const paymentWeek = await apiClient.get(`/payments?createdAt_gt=${lastWeek}`, config)
+                        setPayment(paymentWeek.data)
+                        break;
+                    default :
 
-        },
-        {
-            name: "FRI",
-            uv: 2.1,
+                        let defaultTime = moment().startOf('day').subtract(1, 'month').format('YYYY-MM-DD');
+                        const DefaultPayment = await apiClient.get(`/payments?createdAt_gt=${defaultTime}`, config)
+                        setPayment(DefaultPayment.data)
+                }
+            } catch (e) {
+                console.log(e)
+            }
+        }
 
-        },
-        {
-            name: "SAT",
-            uv: 3.3,
-
-        },
-        {
-            name: "SUN",
-            uv: 1.9,
-
-        },
+        dashboardChart()
+    }, [api_token, dropdownChartFilter])
 
 
-    ];
-    const formatter = (value) => `$${value}k`;
+    const data = payment.map((el) => ({
+        name: moment(el.createdAt).format('YYYY-MM-DD'),
+        uv: el.paid,
+    }));
+
+    const formatter = (value) => `$${value}`;
     return (
         <>
 
@@ -52,13 +58,13 @@ const DashBoardChart = () => {
                     data={data}
 
                 >
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis tickFormatter={formatter} />
-                    <Tooltip />
+                    <CartesianGrid strokeDasharray="3 3"/>
+                    <XAxis dataKey="name"/>
+                    <YAxis tickFormatter={formatter}/>
+                    <Tooltip/>
 
-                    <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-                    <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+                    <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{r: 8}}/>
+                    <Line type="monotone" dataKey="uv" stroke="#82ca9d"/>
                 </LineChart>
             </ResponsiveContainer>
 

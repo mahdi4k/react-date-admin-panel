@@ -4,17 +4,17 @@ import Form from "react-bootstrap/Form"
 import apiClient from "../services/EventService";
 import {ToastContainer, toast} from 'react-toastify';
 
-const AddPackage = ({show , setShow , api_token}) => {
+const AddPackage = ({show, setShow, api_token}) => {
 
-    const [packageName,setPackageName] = useState('')
-    const [packageDays,setPackageDays] = useState('')
-    const [PackagePrice,setPackagePrice] = useState('')
+    const [packageName, setPackageName] = useState('')
+    const [packageDays, setPackageDays] = useState('')
+    const [PackagePrice, setPackagePrice] = useState('')
+    const [checkbox, setChecked] = React.useState(false);
 
     const updateModalState = () => {
         setShow(false)
     }
-
-    const AddPackageHandler = async ()=>{
+     const AddPackageHandler = async () => {
         try {
 
             const config = {
@@ -23,15 +23,19 @@ const AddPackage = ({show , setShow , api_token}) => {
                 }
             }
 
-              await apiClient.post(`/packages`,{
-                  days : packageDays,
-                  title :  packageName,
-                  price : PackagePrice
-              },config)
-              toast.success("package added successfully");
+
+
+            await apiClient.post(`/packages`, {
+                days: packageDays,
+                title: packageName,
+                price: checkbox ? (PackagePrice) - PackagePrice * 30 /100 : PackagePrice,
+                offPackage : checkbox
+            }, config)
+            toast.success("package added successfully");
             setShow(false)
+            window.location.reload()
         } catch (error) {
-              console.log(error)
+            console.log(error)
             toast.error("something wrong please try again");
             // error.response && setMessage(error.response.data.errors)
         }
@@ -45,18 +49,29 @@ const AddPackage = ({show , setShow , api_token}) => {
                 <Modal.Body className='mt-4'>
                     <Form>
                         <Form.Group className='package-form mt-4'>
-                            <Form.Control onChange={e => setPackageName(e.target.value)} type="text" placeholder="Package name..."/>
+                            <Form.Control required onChange={e => setPackageName(e.target.value)} type="text"
+                                          placeholder="Package name..."/>
                         </Form.Group>
                         <Form.Group className='package-form mt-4'>
-                            <Form.Control onChange={e => setPackageDays(e.target.value)} as="select">
+                            <Form.Control required onChange={e => setPackageDays(e.target.value)} as="select">
                                 <option value="31">1 months</option>
                                 <option value="93">3 months</option>
-                                <option value="186">6 months</option>
+                                <option value="1024">1 years</option>
                             </Form.Control>
                         </Form.Group>
 
                         <Form.Group className='package-form mt-4'>
-                            <Form.Control onChange={e => setPackagePrice(e.target.value)} type="text" placeholder="Price"/>
+                            <Form.Control required onChange={e => setPackagePrice(e.target.value)} type="text"
+                                          placeholder="Price"/>
+                        </Form.Group>
+                        <Form.Group controlId="rememberCheckBox">
+                            <label className='w-100 mt-3 cursor text-left d-flex align-items-center'>
+                            <input className='mr-2 custom-checkbox' type="checkbox"
+                                   defaultChecked={checkbox}
+                                   onChange={() => setChecked(!checkbox)}
+                            />
+                            off package
+                            </label>
                         </Form.Group>
                     </Form>
                 </Modal.Body>

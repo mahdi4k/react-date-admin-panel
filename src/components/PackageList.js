@@ -43,7 +43,7 @@ const PackageList = ({title, price, days,packageID,api_token}) => {
                                             <p>Edit</p>
                                         </span>
                         </div>
-                        <div onClick={DeleteBoxShow} className='d-flex align-items-center'>
+                        <div   className='d-flex align-items-center'>
                                         <span className='delete'>
                                             <i className="fal fa-times"> </i>
 

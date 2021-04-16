@@ -14,7 +14,9 @@ const HomeScreen = ({history}) => {
     const [loading, setLoading] = useState(true)
     const [api_token, setApitoken] = useState('')
     const [userDetails, setUserDetails] = useState(Object)
-
+    const [dropdownBoxTitle,setDropdownBoxTitle] = useState('last month')
+    const [dropdownActivityTitle,setDropdownActivityTitle] = useState('All activities')
+    const [dropdownChartTitle,setDropdownChartTitle] = useState('last month')
 
     useEffect(() => {
 
@@ -36,14 +38,10 @@ const HomeScreen = ({history}) => {
                 }
 
                 const userCount = await apiClient.get(`/users/count`, config)
-                const matchCount = await apiClient.get(`/actions/count?action=matched`, config)
                 const likeCount = await apiClient.get(`/actions/count?action=liked`, config)
-                const premiumUser = await apiClient.get(`/users/count?premiumUntil_gte=${moment().format('YYYY-MM-DD')}`, config)
                 setUserDetails({
                     userCount: userCount.data,
-                    matchCount: matchCount.data,
                     likeCount: likeCount.data,
-                    premiumUserCount: premiumUser.data
                 })
                 setLoading(false)
 
@@ -95,21 +93,27 @@ const HomeScreen = ({history}) => {
             }
             let UserActivity;
             switch (filter) {
-                case 0 :
-                    UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=5`, config);
+                case 'all' :
+                    UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=5`, config)
+                    setDropdownActivityTitle('All activities')
                     break;
-                case  7 :
-                    let lastWeek = moment().startOf('day').subtract(1, 'week').format('YYYY-MM-DD');
-                    UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&createdAt_gt=${lastWeek}&_limit=5`, config);
+                case  'like' :
+                    UserActivity = await apiClient.get(`/actions?action_eq=matched&_limit=5`, config);
+                    setDropdownActivityTitle('like')
                     break;
-                case 30 :
-                    let lastMonth = moment().startOf('day').subtract(1, 'month').format('YYYY-MM-DD');
-                    UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&createdAt_gt=${lastMonth}&_limit=5`, config)
+                case 'block' :
+                    UserActivity = await apiClient.get(`/actions?action_eq=blocked&_limit=5`, config)
+                    setDropdownActivityTitle('block')
+                    break;
+                case 'match' :
+                    UserActivity = await apiClient.get(`/actions?action_eq=matched&_limit=5`, config)
+                    setDropdownActivityTitle('match')
                     break;
                 default :
                     await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=5`, config);
-            }
 
+            }
+            console.log(dropdownActivityTitle)
             setUserActivityAction(UserActivity.data)
         } catch (error) {
             // console.log(error)
@@ -130,37 +134,36 @@ const HomeScreen = ({history}) => {
                                 <div className="header-section d-flex justify-content-between">
                                     <h2 className='font-weight-bold'>DASHBOARD</h2>
                                     <Dropdown>
-                                        <Dropdown.Toggle variant="default" id="dropdown-basic">
-                                            This month
+                                        <Dropdown.Toggle variant="default" id="dropdown-box">
+                                            {dropdownBoxTitle}
                                         </Dropdown.Toggle>
 
                                         <Dropdown.Menu>
-                                            <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                            <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                                            <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                                            <Dropdown.Item onClick={(e)=>setDropdownBoxTitle(e.target.textContent)} href="#">last month</Dropdown.Item>
+                                            <Dropdown.Item onClick={(e)=>setDropdownBoxTitle(e.target.textContent)} href="#">this week</Dropdown.Item>
+                                            <Dropdown.Item onClick={(e)=>setDropdownBoxTitle(e.target.textContent)} href="#">today</Dropdown.Item>
                                         </Dropdown.Menu>
                                     </Dropdown>
                                 </div>
 
                                 {/*----dashboard boxes----*/}
-                                <HomeDashboardBoxes api_token={api_token} userDetails={userDetails}/>
+                                <HomeDashboardBoxes ActivityFilter={dropdownBoxTitle} api_token={api_token}  />
 
                                 <div className="dashboard-chart">
                                     <div className="d-flex header-section justify-content-between my-3 ">
                                         <h2 className='font-weight-bold'>Subscription Income</h2>
                                         <Dropdown>
                                             <Dropdown.Toggle variant="default" id="dropdown-basic">
-                                                Weekly
+                                                {dropdownChartTitle}
                                             </Dropdown.Toggle>
 
                                             <Dropdown.Menu>
-                                                <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                                                <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                                                <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                                                <Dropdown.Item onClick={(e)=>setDropdownChartTitle(e.target.textContent)} href="#">last month</Dropdown.Item>
+                                                <Dropdown.Item onClick={(e)=>setDropdownChartTitle(e.target.textContent)} href="#/action-2">this week</Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     </div>
-                                    <DashBoardChart/>
+                                    <DashBoardChart api_token={api_token} dropdownChartFilter={dropdownChartTitle}/>
                                 </div>
                             </div>
                         </Col>
@@ -168,7 +171,7 @@ const HomeScreen = ({history}) => {
                         {/*----right-side------*/}
                         <Col className='bg-white' md={3}>
                             <div className=' right-side p-3'>
-                                <DashBoardProgress/>
+                                <DashBoardProgress api_token={api_token} />
 
                                 <div className='d-flex flex-wrap flex-xxl-nowrap matching mt-5'>
                                     <div className='mt-3 mb-3 mb-xxl-0'>
@@ -192,17 +195,20 @@ const HomeScreen = ({history}) => {
                                     <div className="header-section d-flex   justify-content-between">
                                         <h2 className='font-weight-bold'>User Activity</h2>
                                         <Dropdown>
-                                            <Dropdown.Toggle variant="default" id="dropdown-basic">
-                                                All activities
+                                            <Dropdown.Toggle variant="default" id="dropdown-basic2">
+                                                {dropdownActivityTitle}
                                             </Dropdown.Toggle>
 
                                             <Dropdown.Menu>
-                                                <Dropdown.Item onClick={() => filterActivity(0)} href="#">all
-                                                    activity</Dropdown.Item>
-                                                <Dropdown.Item onClick={() => filterActivity(7)} href="#">last
-                                                    weak</Dropdown.Item>
-                                                <Dropdown.Item onClick={() => filterActivity(30)} href="#">last
-                                                    month</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => filterActivity('all')} href="#">
+                                                    All activities
+                                                    </Dropdown.Item>
+                                                <Dropdown.Item onClick={() => filterActivity('like')}
+                                                               href="#">like</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => filterActivity('match')}
+                                                               href="#">match</Dropdown.Item>
+                                                <Dropdown.Item onClick={() => filterActivity('block')}
+                                                               href="#">block</Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     </div>
@@ -219,8 +225,8 @@ const HomeScreen = ({history}) => {
                                                         <div className="userActivityItem">
                                                             <img src="./img/sidebar/user.png" alt=""/>
                                                             <p className='ml-2'>
-                                                                <span>{el.user1.username}</span> {el.action}
-                                                                <span>{el.user2.username}</span></p>
+                                                                <span> { el.user1.username} </span> {el.action}
+                                                                <span> {el.user2.username} </span> </p>
                                                         </div>
                                                         <p className='times'>{durationAction} min </p>
                                                     </div>
