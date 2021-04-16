@@ -7,8 +7,9 @@ import {ToastContainer, toast} from 'react-toastify';
 const AddPackage = ({show, setShow, api_token}) => {
 
     const [packageName, setPackageName] = useState('')
-    const [packageDays, setPackageDays] = useState('')
+    const [packageDays, setPackageDays] = useState(Number)
     const [PackagePrice, setPackagePrice] = useState('')
+    const [planID, setPlanID] = useState('')
     const [checkbox, setChecked] = React.useState(false);
 
     const updateModalState = () => {
@@ -29,7 +30,8 @@ const AddPackage = ({show, setShow, api_token}) => {
                 days: packageDays,
                 title: packageName,
                 price: checkbox ? (PackagePrice) - PackagePrice * 30 /100 : PackagePrice,
-                offPackage : checkbox
+                offPackage : checkbox,
+                planId : planID
             }, config)
             toast.success("package added successfully");
             setShow(false)
@@ -51,6 +53,10 @@ const AddPackage = ({show, setShow, api_token}) => {
                         <Form.Group className='package-form mt-4'>
                             <Form.Control required onChange={e => setPackageName(e.target.value)} type="text"
                                           placeholder="Package name..."/>
+                        </Form.Group>
+                        <Form.Group className='package-form mt-4'>
+                            <Form.Control required onChange={e => setPlanID(e.target.value)} type="text"
+                                          placeholder="Plan ID..."/>
                         </Form.Group>
                         <Form.Group className='package-form mt-4'>
                             <Form.Control required onChange={e => setPackageDays(e.target.value)} as="select">

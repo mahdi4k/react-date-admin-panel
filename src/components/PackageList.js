@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import DeleteModal from "./DeleteModal";
 import UpdatePackage from "./UpdatePackage";
 
-const PackageList = ({title, price, days,packageID,api_token}) => {
+const PackageList = ({title, price, days,packageID,api_token,checkboxOff,planId}) => {
     const [show, setShow] = useState(false);
     const [Updateshow, setUpdateShow] = useState(false);
     const [packageUpdated, setPackageUpdated] = useState(Array);
@@ -64,6 +64,8 @@ const PackageList = ({title, price, days,packageID,api_token}) => {
                 packageID={packageID}
                 price={price}
                 days={days}
+                checkboxOff={checkboxOff}
+                planId={planId}
                 title={title}
                 api_token={api_token}
                 setPackageUpdated={setPackageUpdated}

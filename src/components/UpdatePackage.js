@@ -4,19 +4,21 @@ import {toast, ToastContainer} from "react-toastify";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
 
-const UpdatePackage = ({api_token, show, setShow, packageID, price, title, days,setPackageUpdated}) => {
+const UpdatePackage = ({api_token, show, setShow, packageID, price, title, days, setPackageUpdated, checkboxOff, planId}) => {
 
     const [packageName, setPackageName] = useState(title)
     const [packageDays, setPackageDays] = useState(days)
     const [PackagePrice, setPackagePrice] = useState(price)
-    //const [packageUpdated,setPackagedUpdated] = useState(Array)
+    const [planID, setPlanID] = useState(planId)
+    const [checkbox, setChecked] = React.useState(checkboxOff);
+
     const updateModalState = () => {
         setShow(false)
     }
-/*    const deleteUser = () => {
+    /*    const deleteUser = () => {
 
-        setShow(false)
-    }*/
+            setShow(false)
+        }*/
 
     const UpdatePackageHandler = async () => {
         try {
@@ -27,10 +29,12 @@ const UpdatePackage = ({api_token, show, setShow, packageID, price, title, days,
                 }
             }
 
-           const updatePackaged = await apiClient.put(`/packages/${packageID}`, {
+            const updatePackaged = await apiClient.put(`/packages/${packageID}`, {
                 days: packageDays,
                 title: packageName,
-                price: PackagePrice
+                price: checkbox ? (PackagePrice) - PackagePrice * 30 / 100 : PackagePrice,
+                offPackage: checkbox,
+                planId: planID
             }, config)
             setPackageUpdated(updatePackaged.data)
             toast.success("package added successfully");
@@ -50,11 +54,17 @@ const UpdatePackage = ({api_token, show, setShow, packageID, price, title, days,
                 <Modal.Body className='mt-4'>
                     <Form>
                         <Form.Group className='package-form mt-4'>
-                            <Form.Control value={packageName || ''} onChange={e => setPackageName(e.target.value)} type="text"
+                            <Form.Control value={packageName || ''} onChange={e => setPackageName(e.target.value)}
+                                          type="text"
                                           placeholder="Package name..."/>
                         </Form.Group>
                         <Form.Group className='package-form mt-4'>
-                            <Form.Control value={packageDays} onChange={e => setPackageDays(e.target.value)} as="select">
+                            <Form.Control value={planID || ''} onChange={e => setPlanID(e.target.value)} type="text"
+                                          placeholder="Plan ID..."/>
+                        </Form.Group>
+                        <Form.Group className='package-form mt-4'>
+                            <Form.Control value={packageDays} onChange={e => setPackageDays(e.target.value)}
+                                          as="select">
                                 <option value="31">1 months</option>
                                 <option value="93">3 months</option>
                                 <option value="186">6 months</option>
@@ -62,8 +72,18 @@ const UpdatePackage = ({api_token, show, setShow, packageID, price, title, days,
                         </Form.Group>
 
                         <Form.Group className='package-form mt-4'>
-                            <Form.Control value={PackagePrice} onChange={e => setPackagePrice(e.target.value)} type="text"
+                            <Form.Control value={PackagePrice} onChange={e => setPackagePrice(e.target.value)}
+                                          type="text"
                                           placeholder="Price"/>
+                        </Form.Group>
+                        <Form.Group controlId="rememberCheckBox">
+                            <label className='w-100 mt-3 cursor text-left d-flex align-items-center'>
+                                <input className='mr-2 custom-checkbox' type="checkbox"
+                                       defaultChecked={checkbox}
+                                       onChange={() => setChecked(!checkbox)}
+                                />
+                                off package
+                            </label>
                         </Form.Group>
                     </Form>
                 </Modal.Body>

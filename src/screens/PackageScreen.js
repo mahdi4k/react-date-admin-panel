@@ -68,6 +68,8 @@ const PackageScreen = ({history}) => {
                                                   packageID={pack._id}
                                                   title={pack.title}
                                                   price={pack.price}
+                                                  checkboxOff={pack.offPackage}
+                                                  planId={pack.planId}
                                                   api_token={api_token}
                                                   days={pack.days}/>
                                 ))}
