@@ -34,9 +34,9 @@ const DashBoardProgress = ({api_token}) => {
 
         }
 
-    },[])
+    },[api_token])
 
-const percentage = percentProgress;
+const percentage = Math.round(percentProgress) ;
 return (
     <div className='custom-progressbar'>
 

@@ -3,6 +3,7 @@ import DeleteModal from "./DeleteModal";
 import apiClient from "../services/EventService";
 import moment from "moment";
 import {toast, ToastContainer} from "react-toastify";
+import TimeAgo from 'react-timeago'
 import Loader from "./Loader";
 
 const UserPreview = ({userDetail, api_token}) => {
@@ -16,6 +17,7 @@ const UserPreview = ({userDetail, api_token}) => {
     useEffect(() => {
         if (userDetail) {
             setLoading(true)
+
             async function getuserDetails() {
                 try {
                     const api_token = JSON.parse(localStorage.getItem('user_api'))
@@ -26,15 +28,14 @@ const UserPreview = ({userDetail, api_token}) => {
                     }
 
                     const {data} = await apiClient.get(`/users/${userDetail.id}`, config)
-                    const LikeGiven = await apiClient.get(`/actions/count?action=liked&_id=${userDetail.id}`, config)
-                    const UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&_where[user1._id]=${userDetail.id}`, config)
+                    const LikeGiven = await apiClient.get(`/actions/count?action=liked&user2._id=${userDetail.id}`, config)
+                    const UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&_where[user1._id]=${userDetail.id}&_sort=createdAt:DESC&_limit=5`, config)
                     setUserInfo(data)
                     setLikeGiven(LikeGiven.data)
                     setUserActivity(UserActivity.data)
                     setLoading(false)
 
 
-                    //setUserActivityAction(UserActivity.data)
                 } catch (error) {
                     // console.log(error)
                     // error.response && setMessage(error.response.data.errors)
@@ -71,7 +72,7 @@ const UserPreview = ({userDetail, api_token}) => {
         }
 
 
-    }, [deleteConfirm,api_token,userDetail])
+    }, [deleteConfirm, api_token, userDetail])
 
 
     const blockUser = async () => {
@@ -95,7 +96,7 @@ const UserPreview = ({userDetail, api_token}) => {
 
     const checkUserDetail = (
         <>
-            {(userDetail && loading)  ? <Loader/> : (userDetail && !loading) ?
+            {(userDetail && loading) ? <Loader/> : (userDetail && !loading) ?
                 <div>
 
                     <div className=' profile-preview p-3'>
@@ -112,16 +113,16 @@ const UserPreview = ({userDetail, api_token}) => {
                             </div>
                             <div className='d-flex flex-column flex-xl-row preview-detail-box'>
                                 <div className='box border-right'>
-                                    <p className='sex font-weight-bold '>Male</p>
+                                    <p className='sex font-weight-bold '>Gender</p>
                                     <p className='font-weight-light text-secondary'> {userInfo.profile.gender}</p>
                                 </div>
                                 <div className='box border-right'>
                                     <p className='year font-weight-bold'>{userInfo.profile.age}</p>
-                                    <p className='font-weight-light text-secondary'>Years old</p>
+                                    <p className='font-weight-light text-secondary noWhiteSpace'>Years old</p>
                                 </div>
                                 <div className='box'>
                                     <p className='like font-weight-bold'>{likeGiven}</p>
-                                    <p className='font-weight-light text-secondary'>Likes given</p>
+                                    <p className='font-weight-light text-secondary noWhiteSpace'>Likes given</p>
                                 </div>
                             </div>
                         </div>
@@ -134,21 +135,23 @@ const UserPreview = ({userDetail, api_token}) => {
 
                                 {userActivity.length === 0 ? <p className='text-center mb-3'>no activity</p> :
                                     userActivity.map((el) => {
-                                            const currentTime = moment()
+
                                             const CallTime = moment().format('X') - moment(el.createdAt).format('X')
                                             const diffTime = moment().format('X') - CallTime
                                             const actionTime = moment.unix(diffTime).format('YYYY-MM-DD')
-                                            const durationAction = currentTime.diff(actionTime, "minute")
-                                            return (
+
+                                            const durationAction =  <TimeAgo date={actionTime} />
+                                             return (
                                                 <div key={el._id}
                                                      className="d-flex justify-content-between mb-4 align-items-center">
                                                     <div className="userActivityItem">
                                                         <img src="./img/sidebar/user.png" alt=""/>
                                                         <p className='ml-2'>
                                                             <span className='mr-2'>{el.user1.username}</span> {el.action}
-                                                            <span className='ml-2'>{el.user2.username}</span></p>
+                                                            <span className='ml-2'>{el.user2.username}</span>
+                                                        </p>
                                                     </div>
-                                                    <p className='times'>{durationAction} min </p>
+                                                    <p className='times'>{durationAction}</p>
                                                 </div>
                                             )
                                         }
@@ -156,7 +159,8 @@ const UserPreview = ({userDetail, api_token}) => {
 
 
                                 <div className='d-flex flex-column flex-xxl-row justify-content-between'>
-                                    <button onClick={blockUser} className='btn btn-userBlock mb-3 mb-xxl-0'>Block</button>
+                                    <button onClick={blockUser} className='btn btn-userBlock mb-3 mb-xxl-0'>Block
+                                    </button>
                                     <button onClick={DeleteBoxShow} className='btn btn-userDelete'>Delete</button>
                                 </div>
                             </div>

@@ -8,6 +8,7 @@ import "../css/home-dashboard.scss"
 import moment from "moment";
 import Loader from "../components/Loader";
 import HomeDashboardBoxes from "../components/HomeDashboardBoxes";
+import TimeAgo from "react-timeago";
 
 const HomeScreen = ({history}) => {
 
@@ -36,12 +37,15 @@ const HomeScreen = ({history}) => {
                         Authorization: `Bearer ${api_token}`
                     }
                 }
-
+                let lastMonth = moment().startOf('day').subtract(1, 'month').format('YYYY-MM-DD');
                 const userCount = await apiClient.get(`/users/count`, config)
-                const likeCount = await apiClient.get(`/actions/count?action=liked`, config)
+                const likeCount = await apiClient.get(`/actions/count?action=liked&createdAt_gt=${lastMonth}`, config)
+                const matchCount = await apiClient.get(`/actions/count?action=matched&createdAt_gt=${lastMonth}`, config)
+
                 setUserDetails({
                     userCount: userCount.data,
                     likeCount: likeCount.data,
+                    matchCount : matchCount.data
                 })
                 setLoading(false)
 
@@ -94,27 +98,26 @@ const HomeScreen = ({history}) => {
             let UserActivity;
             switch (filter) {
                 case 'all' :
-                    UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=5`, config)
+                    UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=5&_sort=createdAt:DESC`, config)
                     setDropdownActivityTitle('All activities')
                     break;
                 case  'like' :
-                    UserActivity = await apiClient.get(`/actions?action_eq=matched&_limit=5`, config);
+                    UserActivity = await apiClient.get(`/actions?action_eq=liked&_limit=5&_sort=createdAt:DESC `, config);
                     setDropdownActivityTitle('like')
                     break;
                 case 'block' :
-                    UserActivity = await apiClient.get(`/actions?action_eq=blocked&_limit=5`, config)
+                    UserActivity = await apiClient.get(`/actions?action_eq=blocked&_limit=5&_sort=createdAt:DESC`, config)
                     setDropdownActivityTitle('block')
                     break;
                 case 'match' :
-                    UserActivity = await apiClient.get(`/actions?action_eq=matched&_limit=5`, config)
+                    UserActivity = await apiClient.get(`/actions?action_eq=matched&_limit=5&_sort=createdAt:DESC`, config)
                     setDropdownActivityTitle('match')
                     break;
                 default :
-                    await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=5`, config);
+                    await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=5&_sort=createdAt:DESC`, config);
 
             }
-            console.log(dropdownActivityTitle)
-            setUserActivityAction(UserActivity.data)
+             setUserActivityAction(UserActivity.data)
         } catch (error) {
             // console.log(error)
             // error.response && setMessage(error.response.data.errors)
@@ -159,7 +162,7 @@ const HomeScreen = ({history}) => {
 
                                             <Dropdown.Menu>
                                                 <Dropdown.Item onClick={(e)=>setDropdownChartTitle(e.target.textContent)} href="#">last month</Dropdown.Item>
-                                                <Dropdown.Item onClick={(e)=>setDropdownChartTitle(e.target.textContent)} href="#/action-2">this week</Dropdown.Item>
+                                                <Dropdown.Item onClick={(e)=>setDropdownChartTitle(e.target.textContent)} href="#">this week</Dropdown.Item>
                                             </Dropdown.Menu>
                                         </Dropdown>
                                     </div>
@@ -182,7 +185,7 @@ const HomeScreen = ({history}) => {
                                     </div>
                                     <div className='box'>
                                         <img className='crown-icon' src="./img/sidebar/fr-following.svg" alt=""/>
-                                        <p className='total'>155</p>
+                                        <p className='total'>{userDetails.matchCount}</p>
                                         <p>Matches</p>
                                     </div>
                                     <div className='box'>
@@ -214,11 +217,10 @@ const HomeScreen = ({history}) => {
                                     </div>
                                     <div className="userActivityList mt-4">
                                         {userActivityAction.map((el) => {
-                                                const currentTime = moment()
                                                 const CallTime = moment().format('X') - moment(el.createdAt).format('X')
                                                 const diffTime = moment().format('X') - CallTime
                                                 const actionTime = moment.unix(diffTime).format('YYYY-MM-DD')
-                                                const durationAction = currentTime.diff(actionTime, "minute")
+                                                const durationAction =  <TimeAgo date={actionTime} />
                                                 return (
                                                     <div key={el._id}
                                                          className="d-flex justify-content-between mb-4 align-items-center">
@@ -228,7 +230,7 @@ const HomeScreen = ({history}) => {
                                                                 <span> { el.user1.username} </span> {el.action}
                                                                 <span> {el.user2.username} </span> </p>
                                                         </div>
-                                                        <p className='times'>{durationAction} min </p>
+                                                        <p className='times'>{durationAction} </p>
                                                     </div>
                                                 )
                                             }

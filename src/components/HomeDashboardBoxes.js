@@ -30,8 +30,8 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
                         let lastTwoMonth = moment().startOf('day').subtract(2, 'month').format('YYYY-MM-DD');
 
                         //user count percent
-                        const userCountLastMonth = await apiClient.get(`/users?createdAt_gt=${lastMonth}`, config)
-                        const userCountLastTwoMonth = await apiClient.get(`/users?createdAt_gt=${lastTwoMonth}&createdAt_lt=${lastMonth}`, config)
+                        const userCountLastMonth = await apiClient.get(`/users?deleted=false&createdAt_gt=${lastMonth}`, config)
+                        const userCountLastTwoMonth = await apiClient.get(`/users?deleted=false&createdAt_gt=${lastTwoMonth}&createdAt_lt=${lastMonth}`, config)
 
                         //match user count percent
                         const matchCountLastMonth = await apiClient.get(`/actions/count?action=matched&createdAt_gt=${lastMonth}`, config)
@@ -39,7 +39,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
 
                         //like user count percent
                         const PremiumUserCountLastMonth = await apiClient.get(`users/count?premiumUntil_gt=${lastMonth}`, config)
-                        const PremiumUserLikeCountLastTwoMonth = await apiClient.get(`/users/count?premiumUntil_gt=${lastTwoMonth}&premiumUntil_lt=${lastMonth}`, config)
+                        const PremiumUserLikeCountLastTwoMonth = await apiClient.get(`/users/count?deleted=false&premiumUntil_gt=${lastTwoMonth}&premiumUntil_lt=${lastMonth}`, config)
 
 
                         setPercentUser((userCountLastMonth.data.length - userCountLastTwoMonth.data.length) / userCountLastMonth.data.length * 100)
@@ -56,8 +56,8 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
                         let lastTwoWeek = moment().startOf('day').subtract(2, 'week').format('YYYY-MM-DD');
 
                         //user count percent
-                        const userCountLastWeek = await apiClient.get(`/users?createdAt_gt=${lastWeek}`, config)
-                        const userCountLastTwoWeek = await apiClient.get(`/users?createdAt_gt=${lastTwoWeek}&createdAt_lt=${lastWeek}`, config)
+                        const userCountLastWeek = await apiClient.get(`/users?deleted=false&createdAt_gt=${lastWeek}`, config)
+                        const userCountLastTwoWeek = await apiClient.get(`/users?deleted=false&createdAt_gt=${lastTwoWeek}&createdAt_lt=${lastWeek}`, config)
 
                         //match user count percent
                         const matchCountLastWeek = await apiClient.get(`/actions/count?action=matched&createdAt_gt=${lastWeek}`, config)
@@ -65,7 +65,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
 
                         //like user count percent
                         const PremiumUserCountLastWeek = await apiClient.get(`users/count?premiumUntil_gt=${lastWeek}`, config)
-                        const PremiumUserLikeCountLastTwoWeek = await apiClient.get(`/users/count?premiumUntil_gt=${lastTwoWeek}&premiumUntil_lt=${lastTwoWeek}`, config)
+                        const PremiumUserLikeCountLastTwoWeek = await apiClient.get(`/users/count?deleted=false&premiumUntil_gt=${lastTwoWeek}&premiumUntil_lt=${lastTwoWeek}`, config)
 
 
                         setPercentUser((userCountLastWeek.data.length - userCountLastTwoWeek.data.length) / userCountLastWeek.data.length * 100)
@@ -82,8 +82,8 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
                         let lastTwoDay = moment().startOf('day').subtract(2, 'day').format('YYYY-MM-DD');
 
                         //user count percent
-                        const userCountLastDay = await apiClient.get(`/users?createdAt_gt=${lastDay}`, config)
-                        const userCountLastTwoDay = await apiClient.get(`/users?createdAt_gt=${lastTwoDay}&createdAt_lt=${lastTwoDay}`, config)
+                        const userCountLastDay = await apiClient.get(`/users?deleted=false&createdAt_gt=${lastDay}`, config)
+                        const userCountLastTwoDay = await apiClient.get(`/users?deleted=false&createdAt_gt=${lastTwoDay}&createdAt_lt=${lastTwoDay}`, config)
 
                         //match user count percent
                         const matchCountLastDay = await apiClient.get(`/actions/count?action=matched&createdAt_gt=${lastDay}`, config)
@@ -91,7 +91,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
 
                         //like user count percent
                         const PremiumUserCountLastDay = await apiClient.get(`users/count?premiumUntil_gt=${lastDay}`, config)
-                        const PremiumUserLikeCountLastTwoDay = await apiClient.get(`/users/count?premiumUntil_gt=${lastTwoDay}&premiumUntil_lt=${lastTwoDay}`, config)
+                        const PremiumUserLikeCountLastTwoDay = await apiClient.get(`/users/count?deleted=false&premiumUntil_gt=${lastTwoDay}&premiumUntil_lt=${lastTwoDay}`, config)
 
 
                         setPercentUser((userCountLastDay.data.length - userCountLastTwoDay.data.length) / userCountLastDay.data.length * 100)
@@ -134,7 +134,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
                             <div className="footer-box d-flex">
                                 {percentUser > 0 ? <img className='users-icon mr-2' src="./img/arrow-up.svg" alt=""/> :
                                     <img className='users-icon mr-2' src="./img/arrow-dwon.svg" alt=""/>}
-                                <p className={percentUser > 0 ? 'percent upPercent' : 'percent downPercent'}>{isNaN(percentUser) ? 0 : percentUser}%</p>
+                                <p className={percentUser > 0 ? 'percent upPercent' : 'percent downPercent'}>{isNaN(percentUser) ? 0 : Math.round(percentUser)}%</p>
                                 <p> than last {ActivityFilter}</p>
                             </div>
                         </>
@@ -160,7 +160,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
                                 {percentMatchUser > 0 ?
                                     <img className='users-icon mr-2' src="./img/arrow-up.svg" alt=""/> :
                                     <img className='users-icon mr-2' src="./img/arrow-dwon.svg" alt=""/>}
-                                <p className={percentMatchUser > 0 ? 'percent upPercent' : 'percent downPercent'}>{isNaN(percentMatchUser) ? 0 : percentMatchUser}%</p>
+                                <p className={percentMatchUser > 0 ? 'percent upPercent' : 'percent downPercent'}>{isNaN(percentMatchUser) ? 0 : Math.round(percentMatchUser)}%</p>
                                 <p> than last {ActivityFilter}</p>
                             </div>
                         </>
@@ -184,7 +184,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
                                 {percentPremiumUser > 0 ?
                                     <img className='users-icon mr-2' src="./img/arrow-up.svg" alt=""/> :
                                     <img className='users-icon mr-2' src="./img/arrow-dwon.svg" alt=""/>}
-                                <p className={percentPremiumUser > 0 ? 'percent upPercent' : 'percent downPercent'}>{isNaN(percentPremiumUser) ? 0 : percentPremiumUser}%</p>
+                                <p className={percentPremiumUser > 0 ? 'percent upPercent' : 'percent downPercent'}>{isNaN(percentPremiumUser) ? 0 : Math.round(percentPremiumUser)}%</p>
                                 <p> than last {ActivityFilter}</p>
                             </div>
                         </>

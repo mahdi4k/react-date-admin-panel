@@ -33,7 +33,7 @@ const UsersScreen = ({history}) => {
         const api_token = JSON.parse(localStorage.getItem('user_api'))
         setApitoken(api_token)
 
-        async function getUsersActivity() {
+        async function getUsersUnblocked() {
             try {
 
                 const config = {
@@ -42,7 +42,7 @@ const UsersScreen = ({history}) => {
                     }
                 }
 
-                const {data} = await apiClient.get(`/users?blocked=false`, config)
+                const {data} = await apiClient.get(`/users?blocked=false&deleted=false`, config)
 
                 const UsersSlice = data.slice(offset, offset + perPage)
                 setUserData(UsersSlice)
@@ -57,9 +57,9 @@ const UsersScreen = ({history}) => {
             }
         }
 
-        getUsersActivity()
+        getUsersUnblocked()
 
-    }, [api_token, offset, setUserData, setPageCount, setApitoken,history,perPage])
+    }, [api_token, offset, setUserData, setPageCount, setApitoken, history, perPage])
 
     // getting blocked users
     useEffect(() => {
@@ -73,7 +73,7 @@ const UsersScreen = ({history}) => {
                     }
                 }
 
-                const {data} = await apiClient.get(`/users?blocked=true`, config)
+                const {data} = await apiClient.get(`/users?blocked=true&deleted=false`, config)
 
                 const BlockedUsersSlice = data.slice(userBlockedOffset, userBlockedOffset + perPage)
                 setBlockedUser(BlockedUsersSlice)
@@ -88,7 +88,7 @@ const UsersScreen = ({history}) => {
 
         getBlockedUsers()
 
-    }, [api_token, offset, setUserData, setPageCount, setApitoken, userBlockedOffset,perPage])
+    }, [api_token, offset, setUserData, setPageCount, setApitoken, userBlockedOffset, perPage])
 
 
     const handlePageClick = (e) => {
@@ -99,7 +99,7 @@ const UsersScreen = ({history}) => {
         const selectedPage = e.selected;
         setUserBlockedOffset(Math.ceil(selectedPage * perPage))
     };
-    console.log(searchCount)
+
     return (
         <>
             {loading ? <Loader/> :

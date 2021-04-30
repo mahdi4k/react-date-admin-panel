@@ -36,7 +36,7 @@ const SubscriptionScreen = ({history}) => {
                     }
                 }
 
-                const {data} = await apiClient.get(`/users?premiumUntil_gte=${moment().format('YYYY-MM-DD')}`, config)
+                const {data} = await apiClient.get(`/users?deleted=false&premiumUntil_gte=${moment().format('YYYY-MM-DD')}`, config)
 
 
                 const SubscriptionSlice = data.slice(offset, offset + perPage)

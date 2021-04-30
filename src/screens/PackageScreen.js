@@ -28,7 +28,7 @@ const PackageScreen = ({history}) => {
                     }
                 }
 
-                const {data} = await apiClient.get(`/packages?_sort=createdAt:DESC`, config)
+                const {data} = await apiClient.get(`/packages?deleted=false`, config)
                 setPackageList(data)
                 setLoading(false)
 

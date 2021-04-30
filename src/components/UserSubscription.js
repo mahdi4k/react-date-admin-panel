@@ -3,7 +3,7 @@ import {Col} from "react-bootstrap";
 import moment from "moment";
 
 const UserSubscription = ({subscribeData}) => {
-    console.log(subscribeData)
+
     return (
 
         <Col xl={3} md={4} className='mb-4'>

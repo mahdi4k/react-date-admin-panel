@@ -59,6 +59,20 @@ $container-max-widths: (
       color: #F92B81
     }
   }
+  .Account-status.common {
+    display: flex;
+    align-items: center;
+
+    svg {
+      width: 35px;
+      fill: #848687;
+    }
+
+    p {
+      font-size: 18px;
+      color: #848687
+    }
+  }
 
   .Account-status {
     display: flex;

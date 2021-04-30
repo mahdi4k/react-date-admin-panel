@@ -136,7 +136,11 @@ $downPercentColor: #FA2155;
       .times{
         font-size: 13px;
         color: #b6b7c1;
+        white-space: nowrap;
       }
     }
   }
+}
+.noWhiteSpace{
+  white-space: nowrap;
 }
