@@ -24,7 +24,7 @@ const UsersScreen = ({history}) => {
     const [pageCount, setPageCount] = useState(0)
     const [BlockedUserpageCount, setPageCountBlockedUser] = useState(0)
     const [searchCount, setSearchCount] = useState('')
-
+    const [UserPreviewButtonActionID, setUserPreviewButtonActionID] = useState('')
     // getting unblocked Users
     useEffect(() => {
         if (localStorage.getItem('user_api') === null) {
@@ -48,6 +48,9 @@ const UsersScreen = ({history}) => {
                 setUserData(UsersSlice)
                 setAllUserData(data)
                 setPageCount(Math.ceil(data.length / perPage))
+                if (UserPreviewButtonActionID) {
+                    setUserData(Userdata.filter(el => el.id !== UserPreviewButtonActionID))
+                }
                 setLoading(false)
 
                 //setUserActivityAction(UserActivity.data)
@@ -59,7 +62,7 @@ const UsersScreen = ({history}) => {
 
         getUsersUnblocked()
 
-    }, [api_token, offset, setUserData, setPageCount, setApitoken, history, perPage])
+    }, [api_token, offset, setUserData, setPageCount, setApitoken, history, perPage, UserPreviewButtonActionID])
 
     // getting blocked users
     useEffect(() => {
@@ -78,7 +81,10 @@ const UsersScreen = ({history}) => {
                 const BlockedUsersSlice = data.slice(userBlockedOffset, userBlockedOffset + perPage)
                 setBlockedUser(BlockedUsersSlice)
                 setPageCountBlockedUser(Math.ceil(data.length / perPage))
+                if (UserPreviewButtonActionID) {
 
+                    setBlockedUser(BlockedUser.filter(el => el.id !== UserPreviewButtonActionID))
+                }
                 //setUserActivityAction(UserActivity.data)
             } catch (error) {
                 // console.log(error)
@@ -88,7 +94,7 @@ const UsersScreen = ({history}) => {
 
         getBlockedUsers()
 
-    }, [api_token, offset, setUserData, setPageCount, setApitoken, userBlockedOffset, perPage])
+    }, [api_token, offset, setUserData,setBlockedUser, setPageCount, setApitoken, userBlockedOffset, perPage,UserPreviewButtonActionID])
 
 
     const handlePageClick = (e) => {
@@ -141,6 +147,7 @@ const UsersScreen = ({history}) => {
                                                               email={el.email}
                                                               createdAt={el.createdAt}
                                                               userID={el._id}
+                                                              blocked={false}
                                                               setUserDetail={setUserDetail}/>
 
                                                 )
@@ -163,7 +170,7 @@ const UsersScreen = ({history}) => {
 
                                                 return (
                                                     <UserList key={el._id}
-                                                              blocked
+                                                              blocked={true}
                                                               api_token={api_token}
                                                               premium={el.premiumUntil}
                                                               username={el.username}
@@ -191,8 +198,11 @@ const UsersScreen = ({history}) => {
                         <Col className='bg-white' md={3}>
                             <div className=' right-side h-100 user-preview p-3'>
 
-                                <UserPreview api_token={api_token} userDetail={userDetail}/>
-
+                                <UserPreview
+                                    userButtonActionID={setUserPreviewButtonActionID}
+                                    api_token={api_token}
+                                    setUserDetail={setUserDetail}
+                                    userDetail={userDetail}/>
                             </div>
                         </Col>
                     </div>

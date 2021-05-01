@@ -51,7 +51,7 @@ const DashBoardChart = ({api_token, dropdownChartFilter}) => {
                             paymentWeekCreated.push(moment(el.createdAt).format('YYYY-MM-DD'))
                             paymentWeekPaid.push(el.paid)
                         })
-                         
+
                         setPaymentDate(paymentWeekCreated)
                         setPaymentPrice(paymentWeekPaid)
 

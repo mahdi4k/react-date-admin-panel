@@ -75,7 +75,7 @@ const HomeScreen = ({history}) => {
                 }
 
 
-                const UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=5`, config)
+                const UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=50`, config)
                 setUserActivityAction(UserActivity.data)
             } catch (error) {
                 // console.log(error)
@@ -98,23 +98,23 @@ const HomeScreen = ({history}) => {
             let UserActivity;
             switch (filter) {
                 case 'all' :
-                    UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=5&_sort=createdAt:DESC`, config)
+                    UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=50&_sort=createdAt:DESC`, config)
                     setDropdownActivityTitle('All activities')
                     break;
                 case  'like' :
-                    UserActivity = await apiClient.get(`/actions?action_eq=liked&_limit=5&_sort=createdAt:DESC `, config);
+                    UserActivity = await apiClient.get(`/actions?action_eq=liked&_limit=50&_sort=createdAt:DESC `, config);
                     setDropdownActivityTitle('like')
                     break;
                 case 'block' :
-                    UserActivity = await apiClient.get(`/actions?action_eq=blocked&_limit=5&_sort=createdAt:DESC`, config)
+                    UserActivity = await apiClient.get(`/actions?action_eq=blocked&_limit=50&_sort=createdAt:DESC`, config)
                     setDropdownActivityTitle('block')
                     break;
                 case 'match' :
-                    UserActivity = await apiClient.get(`/actions?action_eq=matched&_limit=5&_sort=createdAt:DESC`, config)
+                    UserActivity = await apiClient.get(`/actions?action_eq=matched&_limit=50&_sort=createdAt:DESC`, config)
                     setDropdownActivityTitle('match')
                     break;
                 default :
-                    await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=5&_sort=createdAt:DESC`, config);
+                    await apiClient.get(`/actions?action_ne=viewedNearMe&_limit=50&_sort=createdAt:DESC`, config);
 
             }
              setUserActivityAction(UserActivity.data)

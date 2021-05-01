@@ -11,7 +11,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
     const [User, setUser] = useState(Number)
     const [MatchUser, setMatchUser] = useState(Number)
     const [PremiumUser, setPremiumUser] = useState(Number)
-
+    const [activityName, setActivityName] = useState('')
     const [loading, setLoading] = useState(true)
 
     useEffect(() => {
@@ -38,7 +38,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
                         const matchCountLastTwoMonth = await apiClient.get(`/actions/count?action=matched&createdAt_gt=${lastTwoMonth}&createdAt_lt=${lastMonth}`, config)
 
                         //like user count percent
-                        const PremiumUserCountLastMonth = await apiClient.get(`users/count?premiumUntil_gt=${lastMonth}`, config)
+                        const PremiumUserCountLastMonth = await apiClient.get(`users/count?deleted=false&premiumUntil_gt=${lastMonth}`, config)
                         const PremiumUserLikeCountLastTwoMonth = await apiClient.get(`/users/count?deleted=false&premiumUntil_gt=${lastTwoMonth}&premiumUntil_lt=${lastMonth}`, config)
 
 
@@ -49,7 +49,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
                         setUser(userCountLastMonth.data.length)
                         setMatchUser(matchCountLastMonth.data)
                         setPremiumUser(PremiumUserCountLastMonth.data)
-
+                        setActivityName('than last month')
                         break;
                     case 'this week':
                         let lastWeek = moment().startOf('day').subtract(1, 'week').format('YYYY-MM-DD');
@@ -75,6 +75,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
                         setUser(userCountLastWeek.data.length)
                         setMatchUser(matchCountLastWeek.data)
                         setPremiumUser(PremiumUserCountLastWeek.data)
+                        setActivityName('than last week')
                         break;
                     case 'today':
 
@@ -101,7 +102,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
                         setUser(userCountLastDay.data.length)
                         setMatchUser(matchCountLastDay.data)
                         setPremiumUser(PremiumUserCountLastDay.data)
-
+                        setActivityName('than yesterday')
                         break;
 
                 }
@@ -135,7 +136,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
                                 {percentUser > 0 ? <img className='users-icon mr-2' src="./img/arrow-up.svg" alt=""/> :
                                     <img className='users-icon mr-2' src="./img/arrow-dwon.svg" alt=""/>}
                                 <p className={percentUser > 0 ? 'percent upPercent' : 'percent downPercent'}>{isNaN(percentUser) ? 0 : Math.round(percentUser)}%</p>
-                                <p> than last {ActivityFilter}</p>
+                                <p> {activityName}</p>
                             </div>
                         </>
 
@@ -161,7 +162,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
                                     <img className='users-icon mr-2' src="./img/arrow-up.svg" alt=""/> :
                                     <img className='users-icon mr-2' src="./img/arrow-dwon.svg" alt=""/>}
                                 <p className={percentMatchUser > 0 ? 'percent upPercent' : 'percent downPercent'}>{isNaN(percentMatchUser) ? 0 : Math.round(percentMatchUser)}%</p>
-                                <p> than last {ActivityFilter}</p>
+                                <p> {activityName}</p>
                             </div>
                         </>
                     }
@@ -185,7 +186,7 @@ const HomeDashboardBoxes = ({api_token, ActivityFilter}) => {
                                     <img className='users-icon mr-2' src="./img/arrow-up.svg" alt=""/> :
                                     <img className='users-icon mr-2' src="./img/arrow-dwon.svg" alt=""/>}
                                 <p className={percentPremiumUser > 0 ? 'percent upPercent' : 'percent downPercent'}>{isNaN(percentPremiumUser) ? 0 : Math.round(percentPremiumUser)}%</p>
-                                <p> than last {ActivityFilter}</p>
+                                <p>  {activityName}</p>
                             </div>
                         </>
                     }

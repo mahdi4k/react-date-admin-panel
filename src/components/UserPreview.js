@@ -6,7 +6,7 @@ import {toast, ToastContainer} from "react-toastify";
 import TimeAgo from 'react-timeago'
 import Loader from "./Loader";
 
-const UserPreview = ({userDetail, api_token}) => {
+const UserPreview = ({userDetail, api_token, userButtonActionID, setUserDetail}) => {
     const [show, setShow] = useState(false);
     const [loading, setLoading] = useState(true)
     const [userInfo, setUserInfo] = useState([])
@@ -29,7 +29,7 @@ const UserPreview = ({userDetail, api_token}) => {
 
                     const {data} = await apiClient.get(`/users/${userDetail.id}`, config)
                     const LikeGiven = await apiClient.get(`/actions/count?action=liked&user2._id=${userDetail.id}`, config)
-                    const UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&_where[user1._id]=${userDetail.id}&_sort=createdAt:DESC&_limit=5`, config)
+                    const UserActivity = await apiClient.get(`/actions?action_ne=viewedNearMe&_where[user1._id]=${userDetail.id}&_sort=createdAt:DESC&_limit=50`, config)
                     setUserInfo(data)
                     setLikeGiven(LikeGiven.data)
                     setUserActivity(UserActivity.data)
@@ -60,10 +60,12 @@ const UserPreview = ({userDetail, api_token}) => {
                     }
 
                     await apiClient.put(`/users/${userDetail.id}`, {'deleted': true}, config)
+                    userButtonActionID(userDetail.id)
+                    setUserDetail(false)
                     toast.success("user deleted successfully");
 
                 } catch (error) {
-                    toast.success("something wrong please try again");
+                    console.log(error)
 
                 }
 
@@ -72,7 +74,8 @@ const UserPreview = ({userDetail, api_token}) => {
         }
 
 
-    }, [deleteConfirm, api_token, userDetail])
+
+    }, [deleteConfirm, api_token, userDetail, setUserDetail, userButtonActionID])
 
 
     const blockUser = async () => {
@@ -85,15 +88,37 @@ const UserPreview = ({userDetail, api_token}) => {
             }
 
             await apiClient.put(`/users/${userDetail.id}`, {'blocked': true}, config)
+            userButtonActionID(userDetail.id)
+            setUserDetail(false)
             toast.success("user blocked successfully");
+
+        } catch (error) {
+            toast.success("something wrong please try again")
+
+        }
+    };
+
+    const UnblockUser = async (userID) => {
+        try {
+
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${api_token}`
+                }
+            }
+
+            await apiClient.put(`/users/${userID}`, {'blocked': false}, config)
+            userButtonActionID(userID)
+            setUserDetail(false)
+            toast.success("user unblocked successfully");
 
         } catch (error) {
             toast.success("something wrong please try again");
 
         }
-    };
-    const DeleteBoxShow = () => setShow(true);
+    }
 
+    const DeleteBoxShow = () => setShow(true);
     const checkUserDetail = (
         <>
             {(userDetail && loading) ? <Loader/> : (userDetail && !loading) ?
@@ -140,8 +165,8 @@ const UserPreview = ({userDetail, api_token}) => {
                                             const diffTime = moment().format('X') - CallTime
                                             const actionTime = moment.unix(diffTime).format('YYYY-MM-DD')
 
-                                            const durationAction =  <TimeAgo date={actionTime} />
-                                             return (
+                                            const durationAction = <TimeAgo date={actionTime}/>
+                                            return (
                                                 <div key={el._id}
                                                      className="d-flex justify-content-between mb-4 align-items-center">
                                                     <div className="userActivityItem">
@@ -158,11 +183,14 @@ const UserPreview = ({userDetail, api_token}) => {
                                     )}
 
 
-                                <div className='d-flex flex-column flex-xxl-row justify-content-between'>
-                                    <button onClick={blockUser} className='btn btn-userBlock mb-3 mb-xxl-0'>Block
+                            </div>
+                            <div className='d-flex flex-column flex-xxl-row mt-3 justify-content-between'>
+                                {
+                                    userDetail.blocked ? <button onClick={() => UnblockUser(userDetail.id)} className='btn btn-userBlock mb-3 mb-xxl-0'>Unblock
+                                    </button> : <button onClick={blockUser} className='btn btn-userBlock mb-3 mb-xxl-0'>Block
                                     </button>
-                                    <button onClick={DeleteBoxShow} className='btn btn-userDelete'>Delete</button>
-                                </div>
+                                }
+                                <button onClick={DeleteBoxShow} className='btn btn-userDelete'>Delete</button>
                             </div>
                         </div>
                     </div>

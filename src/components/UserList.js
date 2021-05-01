@@ -15,11 +15,13 @@ const UserList = ({premium, blocked, setUserDetail, username, email, createdAt, 
     const [deleteConfirm, setDeleteConfirm] = useState(false)
     const [blockConfirm, setBlockConfirm] = useState(false)
     const timestampPremuimData = moment(premiumDate).format("X")
-    const userClicked = (userID, email) => {
-        setUserDetail({id: userID, email})
+
+    const userClicked = (userID, email, blocked) => {
+        setUserDetail({id: userID, email, blocked})
     }
 
 
+    // delete user in userList
     useEffect(() => {
         if (deleteConfirm) {
             const DeleteUser = async () => {
@@ -44,7 +46,8 @@ const UserList = ({premium, blocked, setUserDetail, username, email, createdAt, 
             DeleteUser()
         }
 
-        if (blockConfirm){
+        // user block in list
+        if (blockConfirm) {
             const BlockUser = async () => {
 
                 try {
@@ -68,7 +71,7 @@ const UserList = ({premium, blocked, setUserDetail, username, email, createdAt, 
         }
 
 
-    }, [deleteConfirm,blockConfirm,api_token,userID])
+    }, [deleteConfirm, blockConfirm, api_token, userID])
 
 
     const UnblockUser = async (userID) => {
@@ -95,25 +98,27 @@ const UserList = ({premium, blocked, setUserDetail, username, email, createdAt, 
     return (
         <div className={hideUSer ? 'd-none' : ''}>
             <div className=' users-list d-flex mt-4 flex-wrap flex-column flex-xl-row'>
-                <div onClick={() => userClicked(userID, email)} className='pl-3 col-12 col-xxl-4 flex-column flex-xl-row
+                <div onClick={() => userClicked(userID, email, blocked)} className='pl-3 col-12 col-xxl-4 flex-column flex-xl-row
                     pr-md-3 pr-lg-5 py-md-4 user-detail text-center text-xl-left'>
-                    <img src={`${process.env.REACT_APP_BASE_URL}${userImage}`} alt=""/>
+                    <div>
+                        <img src={`${process.env.REACT_APP_BASE_URL}${userImage}`} alt=""/>
+                    </div>
                     <div className='ml-3'>
                         <p className='name'>{username}</p>
                         <p className='email'>{email.length > 24 ? email.substring(0, 24) + '...' : email}</p>
                     </div>
                 </div>
                 {timestampPremuimData > currentTime ?
-                    <div onClick={() => userClicked(userID, email)}
+                    <div onClick={() => userClicked(userID, email, blocked)}
                          className='Account-status col-12 col-xxl-3 justify-content-xxl-center
-                        justify-content-center justify-content-lg-end premium '>
+                         justify-content-center justify-content-lg-end premium '>
                         <svg viewBox="0 0 100 100" className="icon mr-3 shape-codepen">
                             <use xlinkHref="/img/sidebar/sprite.svg#fr-crown"/>
                         </svg>
                         <p>premium</p>
                     </div>
                     :
-                    <div onClick={() => userClicked(userID, email)}
+                    <div onClick={() => userClicked(userID, email, blocked)}
                          className='Account-status col-12 col-xxl-3 justify-content-xxl-center
                         justify-content-center justify-content-lg-end premium '>
                         <svg viewBox="0 0 100 100" className="icon mr-3 commonUser shape-codepen">

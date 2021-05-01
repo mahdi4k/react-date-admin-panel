@@ -7,7 +7,7 @@ import {ToastContainer, toast} from 'react-toastify';
 const AddPackage = ({show, setShow, api_token}) => {
 
     const [packageName, setPackageName] = useState('')
-    const [packageDays, setPackageDays] = useState(Number)
+    const [packageDays, setPackageDays] = useState(30)
     const [PackagePrice, setPackagePrice] = useState('')
     const [planID, setPlanID] = useState('')
     const [checkbox, setChecked] = React.useState(false);
@@ -15,7 +15,7 @@ const AddPackage = ({show, setShow, api_token}) => {
     const updateModalState = () => {
         setShow(false)
     }
-     const AddPackageHandler = async () => {
+    const AddPackageHandler = async () => {
         try {
 
             const config = {
@@ -25,13 +25,12 @@ const AddPackage = ({show, setShow, api_token}) => {
             }
 
 
-
             await apiClient.post(`/packages`, {
                 days: packageDays,
                 title: packageName,
-                price: checkbox ? (PackagePrice) - PackagePrice * 30 /100 : PackagePrice,
-                offPackage : checkbox,
-                planId : planID
+                price: checkbox ? (PackagePrice) - PackagePrice * 30 / 100 : PackagePrice,
+                offPackage: checkbox,
+                planId: planID
             }, config)
             toast.success("package added successfully");
             setShow(false)
@@ -72,11 +71,11 @@ const AddPackage = ({show, setShow, api_token}) => {
                         </Form.Group>
                         <Form.Group controlId="rememberCheckBox">
                             <label className='w-100 mt-3 cursor text-left d-flex align-items-center'>
-                            <input className='mr-2 custom-checkbox' type="checkbox"
-                                   defaultChecked={checkbox}
-                                   onChange={() => setChecked(!checkbox)}
-                            />
-                            off package
+                                <input className='mr-2 custom-checkbox' type="checkbox"
+                                       defaultChecked={checkbox}
+                                       onChange={() => setChecked(!checkbox)}
+                                />
+                                off package
                             </label>
                         </Form.Group>
                     </Form>
