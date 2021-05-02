@@ -85,7 +85,7 @@ const DashBoardChart = ({api_token, dropdownChartFilter}) => {
 
 
      let paymentObj = []
-    console.log(paymentDate)
+
       if (paymentDate !== undefined && paymentDate.length !== 0 && chartLoading === false) {
         paymentObj = paymentDate.reduce(function (a, b, i) {
             if (!a.hasOwnProperty(b)) {

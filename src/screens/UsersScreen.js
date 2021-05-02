@@ -25,6 +25,8 @@ const UsersScreen = ({history}) => {
     const [BlockedUserpageCount, setPageCountBlockedUser] = useState(0)
     const [searchCount, setSearchCount] = useState('')
     const [UserPreviewButtonActionID, setUserPreviewButtonActionID] = useState('')
+    const [unblockTabUser,setUnblockTabUser]=useState(false)
+    const [blockTabUser,setBlockTabUser]=useState(false)
     // getting unblocked Users
     useEffect(() => {
         if (localStorage.getItem('user_api') === null) {
@@ -62,7 +64,7 @@ const UsersScreen = ({history}) => {
 
         getUsersUnblocked()
 
-    }, [api_token, offset, setUserData, setPageCount, setApitoken, history, perPage, UserPreviewButtonActionID])
+    }, [api_token, offset, setUserData, setPageCount, setApitoken, history, perPage,unblockTabUser, UserPreviewButtonActionID])
 
     // getting blocked users
     useEffect(() => {
@@ -85,6 +87,7 @@ const UsersScreen = ({history}) => {
 
                     setBlockedUser(BlockedUser.filter(el => el.id !== UserPreviewButtonActionID))
                 }
+
                 //setUserActivityAction(UserActivity.data)
             } catch (error) {
                 // console.log(error)
@@ -94,8 +97,8 @@ const UsersScreen = ({history}) => {
 
         getBlockedUsers()
 
-    }, [api_token, offset, setUserData,setBlockedUser, setPageCount, setApitoken, userBlockedOffset, perPage,UserPreviewButtonActionID])
-
+    }, [api_token, offset, setUserData,setBlockedUser, setPageCount,setUnblockTabUser, setApitoken,blockTabUser, userBlockedOffset, perPage,UserPreviewButtonActionID])
+    console.log(unblockTabUser)
 
     const handlePageClick = (e) => {
         const selectedPage = e.selected;
@@ -105,7 +108,9 @@ const UsersScreen = ({history}) => {
         const selectedPage = e.selected;
         setUserBlockedOffset(Math.ceil(selectedPage * perPage))
     };
-
+    const unblockUser = ()=>{
+        alert('clocked')
+    }
     return (
         <>
             {loading ? <Loader/> :
@@ -121,8 +126,8 @@ const UsersScreen = ({history}) => {
                                     <TabList>
                                         <div className='align-items-center d-flex justify-content-between'>
                                             <div>
-                                                <Tab>Users</Tab>
-                                                <Tab>Blocked Users</Tab>
+                                                <Tab onClick={()=>setUnblockTabUser(!unblockTabUser)} >Users</Tab>
+                                                <Tab onClick={()=>setBlockTabUser(!blockTabUser)}>Blocked Users</Tab>
                                             </div>
                                             <li className='list-unstyled search-box'>
                                                 <Search

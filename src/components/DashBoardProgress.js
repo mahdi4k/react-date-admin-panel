@@ -24,7 +24,7 @@ const DashBoardProgress = ({api_token}) => {
 
                 const matchCountLastMonth = await apiClient.get(`/actions/count?action=matched&createdAt_gt=${lastMonth}`, config)
                 const likeCountLastMonth = await apiClient.get(`/actions/count?action=liked&createdAt_gt=${lastMonth}`, config)
-                console.log(likeCountLastMonth)
+                 
                 setPercentProgress((matchCountLastMonth.data  * 100) / likeCountLastMonth.data  )
             }
 
