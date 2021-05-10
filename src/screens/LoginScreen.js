@@ -64,12 +64,12 @@ const LoginScreen = ({location, history}) => {
                             <Form.Group controlId="rememberCheckBox">
                                 <Form.Check custom type="checkbox" label="Remember my login details" />
                             </Form.Group>
-                            <div className='d-flex mt-5 justify-content-between'>
+                            <div className='d-flex mt-4 justify-content-between'>
                                 <Button className='d-flex btn btn-custom-submit text-center justify-content-center w-25' type='submit'
                                 >
                                     login
                                 </Button>
-                                <button className='btn '>Forget Password</button>
+                                {/* <button className='btn '>Forget Password</button> */}
                             </div>
 
                         </Form>

@@ -162,6 +162,7 @@ p {
     .custom-control-label {
       cursor: pointer;
       margin-left: 15px;
+      white-space: nowrap;
       user-select: none
     }
 
